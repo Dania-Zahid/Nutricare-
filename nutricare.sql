@@ -427,11 +427,11 @@ INSERT INTO nutritionist_unavailable_dates (nutritionist_id, date, reason) VALUE
 
 -- Exercise Types
 INSERT INTO exercise_types (name, description, intensity, duration_minutes, calories_burned, video_url) VALUES
-('Brisk Walking', 'Walking at a pace that raises your heart rate', 'Moderate', 30, 150, 'https://example.com/walking'),
-('Yoga', 'Gentle stretching and breathing exercises', 'Low', 45, 180, 'https://example.com/yoga'),
-('Swimming', 'Full-body low-impact exercise', 'Moderate', 30, 250, 'https://example.com/swimming'),
-('Cycling', 'Low-impact cardio exercise', 'Moderate', 30, 300, 'https://example.com/cycling'),
-('Resistance Training', 'Strength exercises using body weight or equipment', 'High', 45, 350, 'https://example.com/strength');
+('Brisk Walking', 'Walking at a pace that raises your heart rate', 'Moderate', 30, 150, 'https://www.youtube.com/watch?v=wQrV75N2BrI'),
+('Yoga', 'Gentle stretching and breathing exercises', 'Low', 45, 180, 'https://www.youtube.com/watch?v=kqmut7-RARw'),
+('Swimming', 'Full-body low-impact exercise', 'Moderate', 30, 250, 'https://www.youtube.com/watch?v=Rr_CnIfr5u8'),
+('Cycling', 'Low-impact cardio exercise', 'Moderate', 30, 300, 'https://m.youtube.com/watch?v=ZiGE3-L4vyg&t=2m23s'),
+('Resistance Training', 'Strength exercises using body weight or equipment', 'High', 45, 350, 'https://www.youtube.com/watch?v=8YhyqGJZyKs&pp=0gcJCdgAo7VqN5tD');
 
 -- Exercise Recommendations
 INSERT INTO exercise_recommendations (exercise_id, condition_id, frequency, duration_suggestion, notes, benefits) VALUES
