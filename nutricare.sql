@@ -328,7 +328,7 @@ INSERT INTO foods (name, category_id, calories, protein, carbs, fat, fiber, sodi
 ('Whole Wheat Bread', 1, 247, 13, 41, 3.4, 6, 380, 6, 71, 'Bread made from whole wheat flour','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhvnmSPfI3Ch2ZqQsq_4f-sXkJGuOhmWe4YQ&s'),
 
 -- Vegetables
-('Broccoli', 2, 55, 3.7, 11, 0.6, 2.6, 33, 2.2, 15, 'Nutrient-rich green vegetable','https://www.simplyrecipes.com/thmb/pWjqxmRxs_He1V18ryJZSpZab0Q=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__simply_recipes__uploads__2006__01__steamed-broccoli-horiz-b-2000-9c966360d0ad47a29120d700906697d9.jpg'),
+('Broccoli', 2, 55, 3.7, 11, 0.6, 2.6, 33, 2.2, 15, 'Nutrient-rich green vegetable','https://snaped.fns.usda.gov/sites/default/files/styles/crop_ratio_7_5/public/seasonal-produce/2018-05/broccoli.jpg.webp?itok=9hD8BBER'),
 ('Spinach', 2, 23, 2.9, 3.6, 0.4, 2.2, 79, 0.4, 15, 'Leafy green vegetable high in iron','https://www.thespruceeats.com/thmb/Wpdr8OgU89mQDImdVsH96i_-dd4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/what-is-spinach-4783497-hero-07-4a4e988cb48b4973a258d1cc44909780.jpg'),
 
 -- Protein Foods
@@ -337,7 +337,14 @@ INSERT INTO foods (name, category_id, calories, protein, carbs, fat, fiber, sodi
 ('Almonds', 5, 579, 21, 22, 50, 12.5, 1, 4.4, 0, 'Nutritious tree nuts high in healthy fats','https://i0.wp.com/post.healthline.com/wp-content/uploads/2023/02/Almonds-Table-Bowl-1296x728-Header.jpg?w=1155&h=1528'),
 
 -- Dairy
-('Greek Yogurt', 4, 59, 10, 3.6, 0.4, 0, 36, 3.2, 0, 'Thick, protein-rich yogurt with probiotics','https://www.liveeatlearn.com/wp-content/uploads/2024/08/how-to-make-homemade-greek-yogurt-25.jpg');
+('Greek Yogurt', 4, 59, 10, 3.6, 0.4, 0, 36, 3.2, 0, 'Thick, protein-rich yogurt with probiotics','https://www.liveeatlearn.com/wp-content/uploads/2024/08/how-to-make-homemade-greek-yogurt-25.jpg'),
+('Oats', 1, 389, 16.9, 66.3, 6.9, 10.6, 2, 0, 55, 'Whole grain rich in soluble fiber','https://media.post.rvohealth.io/wp-content/uploads/2020/09/oats-1200x628-facebook-1200x628.jpg'),
+('Blueberries', 3, 57, 0.7, 14.5, 0.3, 2.4, 1, 10, 53, 'Antioxidant-rich berries','https://foodmarble.com/more/wp-content/uploads/2021/09/joanna-kosinska-4qujjbj3srs-unsplash-scaled.jpg'),
+('Walnuts', 5, 654, 15.2, 13.7, 65.2, 6.7, 2, 2.6, 15, 'Omega-3 rich nuts','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNKYGude3t4Rfvmc-grYtiy-TeAqEaJ07wug&s'),
+('Lentils', 8, 116, 9, 20, 0.4, 8, 2, 1.8, 32, 'Plant-based protein and fiber source','https://lentillovingfamily.com/wp-content/uploads/2024/05/lentil-types-1.jpg'),
+('Avocado', 3, 160, 2, 8.5, 14.7, 6.7, 7, 0.7, 10, 'Healthy fat fruit','https://nutritionsource.hsph.harvard.edu/wp-content/uploads/2022/04/pexels-antonio-filigno-8538296-1024x657.jpg'),
+('Sweet Potato', 2, 86, 1.6, 20.1, 0.1, 3, 55, 4.2, 63, 'Nutrient-dense root vegetable','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0mmY2E1iC5l8L4RgJrXnTo27dl2qnwmq_VQ&s'),
+('Chia Seeds', 8, 486, 16.5, 42.1, 30.7, 34.4, 16, 0, 30, 'High fiber superfood','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxRVT_xhMOz9mNV8eixIcZiOYGNnXHOCjQJQ&s');
 
 -- Food Recommendations
 INSERT INTO food_recommendations (food_id, condition_id, recommendation_type, reason, scientific_evidence) VALUES
@@ -352,7 +359,100 @@ INSERT INTO food_recommendations (food_id, condition_id, recommendation_type, re
 
 -- High Cholesterol
 (7, 5, 'Recommended', 'Omega-3s help lower triglycerides', 'Fish oil supplementation reduces triglyceride levels.'),
-(9, 5, 'Recommended', 'Monounsaturated fats can help lower LDL cholesterol', 'Nuts have been shown to improve lipid profiles.');
+(9, 5, 'Recommended', 'Monounsaturated fats can help lower LDL cholesterol', 'Nuts have been shown to improve lipid profiles.'),
+
+(4, 1, 'Avoid', 'Refined grains can cause blood sugar spikes', 'White bread has a high glycemic index and low fiber content'),
+(10, 1, 'Avoid', 'Sweetened yogurt contains added sugars', 'Added sugars can rapidly increase blood glucose levels'),
+
+-- Hypertension - Avoid
+(10, 2, 'Avoid', 'Some yogurts can be high in sodium', 'High sodium intake is linked to increased blood pressure'),
+(4, 2, 'Avoid', 'Processed bread often contains high sodium', 'Commercial bread is a major source of dietary sodium'),
+
+-- Hypertension - Moderate
+(8, 2, 'Moderation', 'Lean protein is good but avoid adding salt', 'Chicken is a healthy protein when prepared without added salt'),
+(9, 2, 'Moderation', 'Nuts are healthy but high in calories', 'Almonds contain healthy fats but should be consumed in moderation'),
+
+-- Heart Disease - Avoid
+(3, 3, 'Avoid', 'Refined grains may increase heart disease risk', 'White rice is associated with higher cardiovascular risk in some studies'),
+(4, 3, 'Avoid', 'Processed grains may contribute to heart disease', 'Refined grains lack beneficial nutrients found in whole grains'),
+
+-- Obesity - Avoid
+(3, 4, 'Avoid', 'Refined carbohydrates can contribute to weight gain', 'White rice is calorie-dense with low satiety'),
+(4, 4, 'Avoid', 'Processed bread is often calorie-dense', 'White bread provides calories without promoting fullness'),
+
+-- High Cholesterol - Avoid
+(10, 5, 'Avoid', 'Full-fat dairy products can contain saturated fats', 'Some yogurts are high in saturated fats which may raise LDL'),
+(4, 5, 'Avoid', 'Processed grains often contain unhealthy fats', 'Commercial bread may contain trans fats'),
+
+-- Celiac Disease - Avoid (gluten-containing foods)
+(1, 6, 'Avoid', 'Brown rice is safe but check for cross-contamination', 'Rice is naturally gluten-free but may be processed with wheat'),
+(3, 6, 'Avoid', 'White rice is safe but check for cross-contamination', 'Pure rice is gluten-free but may be contaminated during processing'),
+(4, 6, 'Avoid', 'Wheat bread contains gluten', 'Wheat products must be avoided in celiac disease'),
+
+-- Lactose Intolerance - Avoid
+(10, 7, 'Avoid', 'Yogurt contains lactose', 'Dairy products typically contain lactose unless specially processed'),
+
+(5, 1, 'Recommended', 'Low-carb, high-fiber vegetable helps regulate blood sugar', 'Broccoli has a very low glycemic index and is rich in chromium which helps with insulin sensitivity'),
+(6, 1, 'Recommended', 'Leafy greens have minimal impact on blood glucose', 'Spinach is extremely low in digestible carbs and high in magnesium which benefits diabetes management'),
+
+-- Hypertension Recommended Foods
+(5, 2, 'Recommended', 'Rich in potassium which helps lower blood pressure', 'Broccoli contains compounds that help blood vessel relaxation'),
+(6, 2, 'Recommended', 'High in potassium and nitrates that help reduce blood pressure', 'Studies show spinach can help manage hypertension'),
+(7, 2, 'Recommended', 'Omega-3 fatty acids help reduce blood pressure', 'EPA and DHA in salmon improve endothelial function'),
+
+-- Heart Disease Recommended Foods
+(5, 3, 'Recommended', 'Contains sulforaphane which may prevent blood vessel damage', 'Broccoli has anti-inflammatory properties beneficial for heart health'),
+(6, 3, 'Recommended', 'Rich in dietary nitrates that support heart health', 'Spinach helps improve arterial stiffness'),
+(10, 3, 'Recommended', 'Probiotics in yogurt support heart health', 'Fermented dairy associated with reduced cardiovascular risk'),
+
+-- Obesity Recommended Foods
+(5, 4, 'Recommended', 'Low-calorie, high-volume food promotes satiety', 'Broccoli has only 55 calories per cup but high fiber content'),
+(6, 4, 'Recommended', 'Nutrient-dense with very few calories', 'Spinach provides essential nutrients without excess calories'),
+(7, 4, 'Recommended', 'High-protein fish helps maintain muscle during weight loss', 'Salmon promotes satiety and preserves lean body mass'),
+
+-- High Cholesterol Recommended Foods
+(5, 5, 'Recommended', 'Soluble fiber helps reduce LDL cholesterol', 'Broccoli contains fiber that binds to bile acids'),
+(6, 5, 'Recommended', 'Contains lutein which prevents cholesterol oxidation', 'Spinach phytochemicals support lipid metabolism'),
+
+-- Celiac Disease Recommended Foods
+(5, 6, 'Recommended', 'Naturally gluten-free and nutrient-dense', 'Broccoli is safe for gluten-free diets and highly nutritious'),
+(6, 6, 'Recommended', 'Gluten-free leafy green packed with nutrients', 'Spinach provides iron often lacking in gluten-free diets'),
+(7, 6, 'Recommended', 'Excellent gluten-free protein source', 'Salmon provides essential fatty acids missing in some GF diets'),
+
+-- Lactose Intolerance Recommended Foods
+(5, 7, 'Recommended', 'Dairy-free calcium-rich vegetable', 'Broccoli provides calcium without lactose'),
+(6, 7, 'Recommended', 'Excellent source of lactose-free nutrients', 'Spinach provides calcium, magnesium and iron'),
+(7, 7, 'Recommended', 'Provides vitamin D without dairy', 'Salmon is a natural source of vitamin D'),
+(9, 7, 'Recommended', 'Dairy-free source of calcium', 'Almonds provide calcium without lactose'),
+(11, 1, 'Recommended', 'Beta-glucan fiber helps control blood sugar', 'Oats significantly improve glycemic control'),
+(11, 2, 'Recommended', 'Soluble fiber helps lower blood pressure', 'Oat consumption associated with reduced hypertension risk'),
+(11, 5, 'Recommended', 'Reduces LDL cholesterol absorption', 'FDA-approved health claim for oats and heart health'),
+
+-- Blueberries
+(12, 1, 'Recommended', 'Anthocyanins improve insulin sensitivity', 'Berries have low glycemic impact and benefits for diabetes'),
+(12, 3, 'Recommended', 'Antioxidants protect blood vessels', 'Blueberries improve endothelial function'),
+(12, 4, 'Recommended', 'Low-calorie, high-nutrient snack', 'Berries satisfy sweet cravings without excess calories'),
+
+-- Walnuts
+(13, 3, 'Recommended', 'Plant-based omega-3s support heart health', 'Walnuts improve endothelial function and reduce inflammation'),
+(13, 5, 'Recommended', 'Healthy fats improve lipid profile', 'Regular walnut consumption lowers LDL cholesterol'),
+
+-- Lentils
+(14, 1, 'Recommended', 'Slow-digesting carbs prevent blood sugar spikes', 'Lentils have very low glycemic index'),
+(14, 4, 'Recommended', 'High fiber promotes satiety', 'Legumes are among the most satiating foods'),
+
+-- Avocado
+(15, 3, 'Recommended', 'Monounsaturated fats support heart health', 'Avocados improve lipid profiles and antioxidant status'),
+(15, 5, 'Recommended', 'Healthy fats improve cholesterol ratios', 'Avocado consumption increases HDL while lowering LDL'),
+
+-- Sweet Potato
+(16, 1, 'Moderation', 'Fiber-rich carb source (consume in moderation)', 'Despite higher GI, fiber content moderates blood sugar impact'),
+(16, 4, 'Recommended', 'Nutrient-dense, satisfying carbohydrate', 'Provides vitamin A and fiber for weight management'),
+
+-- Chia Seeds
+(17, 1, 'Recommended', 'Extremely high fiber slows glucose absorption', 'Chia seeds can help stabilize blood sugar levels'),
+(17, 2, 'Recommended', 'High potassium and magnesium content', 'Chia seeds provide blood pressure-lowering minerals');
+
 
 -- Food Swaps
 INSERT INTO food_swaps (original_food_id, better_food_id, reason, benefit_description, condition_id) VALUES
