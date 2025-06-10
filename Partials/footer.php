@@ -325,20 +325,20 @@
         <div class="footer-links">
           <h3 class="footer-heading">Features</h3>
           <ul class="footer-list">
-            <li><a href="#">Food Recommendations</a></li>
-            <li><a href="#">Food Swaps</a></li>
-            <li><a href="#">Child Nutrition</a></li>
-            <li><a href="#">Exercise Tips</a></li>
-            <li><a href="#">Favorites</a></li>
-            <li><a href="#">Nutritional Breakdown</a></li>
-            <li><a href="#">Premium Consult</a></li>
+            <li><a href="foodrecommendations.php">Food Recommendations</a></li>
+            <li><a href="foodswap.php">Food Swaps</a></li>
+            <li><a href="childnutrition.php">Child Nutrition</a></li>
+            <li><a href="exercise.php">Exercise Tips</a></li>
+            <li><a href="fav.php">Favorites</a></li>
+            <li><a href="nutritionalbreakdown.php">Nutritional Breakdown</a></li>
+            <li><a href="premium.php">Premium Consult</a></li>
           </ul>
         </div>
 
         <div class="footer-links">
           <h3 class="footer-heading">Company</h3>
           <ul class="footer-list">
-            <li><a href="#">About Us</a></li>
+            <li><a href="contact.php">About Us</a></li>
           </ul>
         </div>
 
