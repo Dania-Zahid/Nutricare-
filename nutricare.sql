@@ -320,24 +320,24 @@ INSERT INTO food_categories (name, description) VALUES
 ('Legumes', 'Beans, lentils, and peas');
 
 -- Sample Foods
-INSERT INTO foods (name, category_id, calories, protein, carbs, fat, fiber, sodium, sugar, glycemic_index, description) VALUES
+INSERT INTO foods (name, category_id, calories, protein, carbs, fat, fiber, sodium, sugar, glycemic_index, description, image_url) VALUES
 -- Grains
-('Brown Rice', 1, 216, 5, 45, 1.8, 3.5, 10, 0.7, 55, 'Whole grain rice with more fiber than white rice'),
-('Quinoa', 1, 222, 8, 39, 3.6, 5, 13, 1.6, 53, 'Protein-rich seed that is cooked and eaten like a grain'),
-('White Rice', 1, 205, 4.3, 45, 0.4, 0.6, 1.6, 0.1, 73, 'Refined grain with less fiber than brown rice'),
-('Whole Wheat Bread', 1, 247, 13, 41, 3.4, 6, 380, 6, 71, 'Bread made from whole wheat flour'),
+('Brown Rice', 1, 216, 5, 45, 1.8, 3.5, 10, 0.7, 55, 'Whole grain rice with more fiber than white rice', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLQfw3seNrdYdFNJzgzIQnWUgCbA0r2D_RxQ&s'),
+('Quinoa', 1, 222, 8, 39, 3.6, 5, 13, 1.6, 53, 'Protein-rich seed that is cooked and eaten like a grain','https://images.immediate.co.uk/production/volatile/sites/30/2022/05/Quinoa-707f5e8.png?resize=768,713'),
+('White Rice', 1, 205, 4.3, 45, 0.4, 0.6, 1.6, 0.1, 73, 'Refined grain with less fiber than brown rice','https://i0.wp.com/www.cocoandash.com/wp-content/uploads/2021/05/IMG_0447.jpg?fit=2592%2C1728&ssl=1'),
+('Whole Wheat Bread', 1, 247, 13, 41, 3.4, 6, 380, 6, 71, 'Bread made from whole wheat flour','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhvnmSPfI3Ch2ZqQsq_4f-sXkJGuOhmWe4YQ&s'),
 
 -- Vegetables
-('Broccoli', 2, 55, 3.7, 11, 0.6, 2.6, 33, 2.2, 15, 'Nutrient-rich green vegetable'),
-('Spinach', 2, 23, 2.9, 3.6, 0.4, 2.2, 79, 0.4, 15, 'Leafy green vegetable high in iron'),
+('Broccoli', 2, 55, 3.7, 11, 0.6, 2.6, 33, 2.2, 15, 'Nutrient-rich green vegetable','https://www.simplyrecipes.com/thmb/pWjqxmRxs_He1V18ryJZSpZab0Q=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__simply_recipes__uploads__2006__01__steamed-broccoli-horiz-b-2000-9c966360d0ad47a29120d700906697d9.jpg'),
+('Spinach', 2, 23, 2.9, 3.6, 0.4, 2.2, 79, 0.4, 15, 'Leafy green vegetable high in iron','https://www.thespruceeats.com/thmb/Wpdr8OgU89mQDImdVsH96i_-dd4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/what-is-spinach-4783497-hero-07-4a4e988cb48b4973a258d1cc44909780.jpg'),
 
 -- Protein Foods
-('Salmon', 5, 208, 20, 0, 13, 0, 59, 0, 0, 'Fatty fish rich in omega-3 fatty acids'),
-('Chicken Breast', 5, 165, 31, 0, 3.6, 0, 74, 0, 0, 'Lean protein source'),
-('Almonds', 5, 579, 21, 22, 50, 12.5, 1, 4.4, 0, 'Nutritious tree nuts high in healthy fats'),
+('Salmon', 5, 208, 20, 0, 13, 0, 59, 0, 0, 'Fatty fish rich in omega-3 fatty acids','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuFd7zlYdssGFg2XtBEJGJIiJ19plfD64xXA&s'),
+('Chicken Breast', 5, 165, 31, 0, 3.6, 0, 74, 0, 0, 'Lean protein source','https://downshiftology.com/wp-content/uploads/2023/01/How-To-Make-Air-Fryer-Chicken-5.jpg'),
+('Almonds', 5, 579, 21, 22, 50, 12.5, 1, 4.4, 0, 'Nutritious tree nuts high in healthy fats','https://i0.wp.com/post.healthline.com/wp-content/uploads/2023/02/Almonds-Table-Bowl-1296x728-Header.jpg?w=1155&h=1528'),
 
 -- Dairy
-('Greek Yogurt', 4, 59, 10, 3.6, 0.4, 0, 36, 3.2, 0, 'Thick, protein-rich yogurt with probiotics');
+('Greek Yogurt', 4, 59, 10, 3.6, 0.4, 0, 36, 3.2, 0, 'Thick, protein-rich yogurt with probiotics','https://www.liveeatlearn.com/wp-content/uploads/2024/08/how-to-make-homemade-greek-yogurt-25.jpg');
 
 -- Food Recommendations
 INSERT INTO food_recommendations (food_id, condition_id, recommendation_type, reason, scientific_evidence) VALUES
