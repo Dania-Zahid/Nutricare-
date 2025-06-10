@@ -263,7 +263,16 @@
       color: rgba(255, 255, 255, 0.9); 
     }
 
+/* Add this to your existing CSS */
+.feature-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
 
+.feature-card:hover {
+  text-decoration: none;
+}
 /* Stats Section */
 .stats-section {
   background-color: white;
@@ -661,72 +670,73 @@
   </div>
 </section>
      <!-- Features Section -->
-     <section class="features-section">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">Our Features</h2>
-          <p class="section-description">Explore our comprehensive set of tools designed to help you achieve your health and nutrition goals.</p>
+     
+<section class="features-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Our Features</h2>
+      <p class="section-description">Explore our comprehensive set of tools designed to help you achieve your health and nutrition goals.</p>
+    </div>
+    
+    <div class="features-grid">
+      <a href="foodrecommendations.php" class="feature-card" style="animation-delay: 0s;">
+        <div class="feature-icon">
+          <i class="fas fa-exchange-alt"></i>
         </div>
-        
-        <div class="features-grid">
-          <div class="feature-card" style="animation-delay: 0s;">
-            <div class="feature-icon">
-              <i class="fas fa-exchange-alt"></i>
-            </div>
-            <h3 class="feature-title">Food Recommendations</h3>
-            <p class="feature-description">Food suggestions based on your health conditions and nutritional needs.</p>
-          </div>
-          
-          <div class="feature-card" style="animation-delay: 0.1s;">
-            <div class="feature-icon">
-              <i class="fas fa-sync-alt"></i>
-            </div>
-            <h3 class="feature-title">Food Swaps</h3>
-            <p class="feature-description">Discover healthier alternatives to your favorite foods without sacrificing taste.</p>
-          </div>
-          
-          <div class="feature-card" style="animation-delay: 0.2s;">
-            <div class="feature-icon">
-              <i class="fas fa-baby"></i>
-            </div>
-            <h3 class="feature-title">Child Nutrition</h3>
-            <p class="feature-description">Ensure your children receive proper nutrition for their growth and development.</p>
-          </div>
-          
-          <div class="feature-card" style="animation-delay: 0.3s;">
-            <div class="feature-icon">
-              <i class="fas fa-running"></i>
-            </div>
-            <h3 class="feature-title">Exercise Tips</h3>
-            <p class="feature-description">Complement your diet with appropriate exercise routines for optimal results.</p>
-          </div>
-          
-          <div class="feature-card" style="animation-delay: 0.4s;">
-            <div class="feature-icon">
-              <i class="fas fa-calendar-alt"></i>
-            </div>
-            <h3 class="feature-title">Favorites</h3>
-            <p class="feature-description">Add any of your desired food to favorites and keep the ones you like closer.</p>
-          </div>
-          
-          <div class="feature-card" style="animation-delay: 0.5s;">
-            <div class="feature-icon">
-              <i class="fas fa-chart-pie"></i>
-            </div>
-            <h3 class="feature-title">Nutritional Breakdown</h3>
-            <p class="feature-description">Visualize and understand the nutritional content of every meal </p>
-          </div>
-          
-          <div class="feature-card" style="animation-delay: 0.6s;">
-            <div class="feature-icon">
-              <i class="fas fa-user-plus"></i>
-            </div>
-            <h3 class="feature-title">Premium Consult</h3>
-            <p class="feature-description">Get personalized advice from certified nutritionists and dietitians.</p>
-          </div>
+        <h3 class="feature-title">Food Recommendations</h3>
+        <p class="feature-description">Food suggestions based on your health conditions and nutritional needs.</p>
+      </a>
+      
+      <a href="foodswap.php" class="feature-card" style="animation-delay: 0.1s;">
+        <div class="feature-icon">
+          <i class="fas fa-sync-alt"></i>
         </div>
-      </div>
-    </section>
+        <h3 class="feature-title">Food Swaps</h3>
+        <p class="feature-description">Discover healthier alternatives to your favorite foods without sacrificing taste.</p>
+      </a>
+      
+      <a href="childnutrition.php" class="feature-card" style="animation-delay: 0.2s;">
+        <div class="feature-icon">
+          <i class="fas fa-baby"></i>
+        </div>
+        <h3 class="feature-title">Child Nutrition</h3>
+        <p class="feature-description">Ensure your children receive proper nutrition for their growth and development.</p>
+      </a>
+      
+      <a href="exercise.php" class="feature-card" style="animation-delay: 0.3s;">
+        <div class="feature-icon">
+          <i class="fas fa-running"></i>
+        </div>
+        <h3 class="feature-title">Exercise Tips</h3>
+        <p class="feature-description">Complement your diet with appropriate exercise routines for optimal results.</p>
+      </a>
+      
+      <a href="fav.php" class="feature-card" style="animation-delay: 0.4s;">
+        <div class="feature-icon">
+          <i class="fas fa-calendar-alt"></i>
+        </div>
+        <h3 class="feature-title">Favorites</h3>
+        <p class="feature-description">Add any of your desired food to favorites and keep the ones you like closer.</p>
+      </a>
+      
+      <a href="nutritionalbreakdown.php" class="feature-card" style="animation-delay: 0.5s;">
+        <div class="feature-icon">
+          <i class="fas fa-chart-pie"></i>
+        </div>
+        <h3 class="feature-title">Nutritional Breakdown</h3>
+        <p class="feature-description">Visualize and understand the nutritional content of every meal</p>
+      </a>
+      
+      <a href="premium.php" class="feature-card" style="animation-delay: 0.6s;">
+        <div class="feature-icon">
+          <i class="fas fa-user-plus"></i>
+        </div>
+        <h3 class="feature-title">Premium Consult</h3>
+        <p class="feature-description">Get personalized advice from certified nutritionists and dietitians.</p>
+      </a>
+    </div>
+  </div>
+</section>
 
     <!-- Stats Section -->
     <section class="stats-section">
@@ -854,24 +864,21 @@
         <div class="footer-links">
           <h3 class="footer-heading">Features</h3>
           <ul class="footer-list">
-            <li><a href="#">Food Recommendations</a></li>
-            <li><a href="#">Food Swaps</a></li>
-            <li><a href="#">Child Nutrition</a></li>
-            <li><a href="#">Exercise Tips</a></li>
-            <li><a href="#">Favorites</a></li>
-            <li><a href="#">Nutritional Breakdown</a></li>
-            <li><a href="#">Premium Consult</a></li>
+            <li><a href="foodrecommendations.php">Food Recommendations</a></li>
+            <li><a href="foodswap.php">Food Swaps</a></li>
+            <li><a href="childnutrition.php">Child Nutrition</a></li>
+            <li><a href="exercise.php">Exercise Tips</a></li>
+            <li><a href="fav.php">Favorites</a></li>
+            <li><a href="nutritionalbreakdown.php">Nutritional Breakdown</a></li>
+            <li><a href="premium.php">Premium Consult</a></li>
           </ul>
         </div>
 
         <div class="footer-links">
           <h3 class="footer-heading">Company</h3>
           <ul class="footer-list">
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Our Team</a></li>
-            <li><a href="#">Careers</a></li>
-            <li><a href="#">Press</a></li>
-            <li><a href="#">Blog</a></li>
+            <li><a href="contact.php">About Us</a></li>
+           
           </ul>
         </div>
 
@@ -951,7 +958,7 @@
         });
       });
       
-      //  animation class to elements as they come into view
+     
       const animateOnScroll = () => {
         const elements = document.querySelectorAll('.feature-card, .testimonial-card');
         
@@ -973,7 +980,7 @@
     
     signupButtons.forEach(button => {
       button.addEventListener('click', (e) => {
-        // Prevent default action if it's a button (not a link)
+        
         if (button.tagName === 'BUTTON') {
           e.preventDefault();
         }
@@ -981,7 +988,6 @@
       });
     });
 
-    // Also handle the "Get Started" button in hero section
     const getStartedBtn = document.querySelector('.hero-buttons .btn-primary');
     if (getStartedBtn) {
       getStartedBtn.addEventListener('click', () => {
@@ -989,8 +995,6 @@
       });
     }
   });
-  // Handle all login buttons (both outline and others)
-  
 
     
   </script>
