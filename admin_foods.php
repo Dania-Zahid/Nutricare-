@@ -137,7 +137,7 @@ $foods = $conn->query("
             <a href="admin_conditions.php"><i class="fas fa-heartbeat"></i> Medical Conditions</a>
             <a href="admin_allergens.php"><i class="fas fa-allergies"></i> Allergens</a>
             <a href="admin_consultations.php"><i class="fas fa-calendar-check"></i> Consultations</a>
-            
+            <a href="admin_reviews.php"><i class="fas fa-star"></i> Website Reviews</a>
             <a href="admin_faqs.php"><i class="fas fa-question-circle"></i> FAQs</a>
             <a href="admin_logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
