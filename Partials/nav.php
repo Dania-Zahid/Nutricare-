@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<head>
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NutriCare - Your Health, Your Diet, Your Way</title>
@@ -217,22 +216,22 @@
 
     /* User Profile Button */
     .user-profile-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  background-color: var(--green-light);
-  color: var(--green-dark);
-  transition: all 0.2s ease;
-  margin-left: 0.75rem;
-}
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      background-color: var(--green-light);
+      color: var(--green-dark);
+      transition: all 0.2s ease;
+      margin-left: 0.75rem;
+    }
 
-.user-profile-btn:hover {
-  background-color: var(--green);
-  color: white;
-}
+    .user-profile-btn:hover {
+      background-color: var(--green);
+      color: white;
+    }
 
 
     /* Dropdown Menu */
@@ -276,6 +275,13 @@
 
     .dropdown-item:hover {
       background-color: var(--green-light);
+    }
+
+    /* Login Dropdown Specific Styles */
+    .login-dropdown .dropdown-content {
+      min-width: 10rem;
+      right: 0;
+      left: auto;
     }
 
     /* Mobile Menu */
@@ -416,8 +422,16 @@
      <a id="contactLink" href="#" class="nav-link">Contact</a>
       <a id="helpLink" href="#" class="nav-link">Help</a>
 
-<button class="btn btn-outline" id="loginButtonNav">Log In</button>
-       <button class="btn btn-primary" id="signupButtonNav">Sign Up</button>
+        <!-- Login Dropdown -->
+        <div class="dropdown login-dropdown">
+          <button class="btn btn-outline" id="loginButtonNav">Log In</button>
+          <div class="dropdown-content">
+            <a href="login.php" class="dropdown-item"><i class="fas fa-user"></i> User Login</a>
+            <a href="admin_login.php" class="dropdown-item"><i class="fas fa-user-shield"></i> Admin Login</a>
+          </div>
+        </div>
+        
+       <button class="btn btn-primary" id="signupButtonNav">Sign Up</button>
         <a href="profileform.php" class="user-profile-btn"><i data-feather="user"></i></a>
       </div>
 
@@ -431,8 +445,14 @@
 
       <!-- Mobile login/signup buttons -->
       <div class="navbar-buttons-mobile">
-       <button id="loginButtonMobile" class="btn btn-outline">Log In</button>
-        <button class="btn btn-primary" id="signupButtonNav">Sign Up</button>
+        <div class="dropdown">
+          <button id="loginButtonMobile" class="btn btn-outline">Log In</button>
+          <div class="dropdown-content">
+            <a href="login.php" class="dropdown-item"><i class="fas fa-user"></i> User Login</a>
+            <a href="admin_login.php" class="dropdown-item"><i class="fas fa-user-shield"></i> Admin Login</a>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="signupButtonNav">Sign Up</button>
         <a href="profileform.php" class="user-profile-btn">
           <i data-feather="user"></i>
         </a>
@@ -457,7 +477,12 @@
           <a href="contact.php" class="mobile-menu-item"><i data-feather="info"></i> About</a>
         <a id="contactLink" href="#" class="mobile-menu-item"><i data-feather="mail"></i> Contact</a>
           <a href="#" class="mobile-menu-item"><i data-feather="help-circle"></i> Help</a>
-          <a href="profileform.php" class="user-profile-btn"><i data-feather="user"></i></a>
+        </div>
+
+        <div class="mobile-menu-section">
+          <a href="login.php" class="mobile-menu-item"><i class="fas fa-user"></i> User Login</a>
+          <a href="admin_login.php" class="mobile-menu-item"><i class="fas fa-user-shield"></i> Admin Login</a>
+          <a href="profileform.php" class="mobile-menu-item"><i data-feather="user"></i> Profile</a>
         </div>
       </div>
     </div>
@@ -502,51 +527,68 @@
           dropdownContent.style.display = 'none';
         });
       });
+
+      // Mobile login dropdown
+      const mobileLoginBtn = document.getElementById('loginButtonMobile');
+      const mobileLoginDropdown = mobileLoginBtn.nextElementSibling;
+      
+      mobileLoginBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        mobileLoginDropdown.style.display = mobileLoginDropdown.style.display === 'block' ? 'none' : 'block';
+      });
+      
+      // Close mobile dropdown when clicking elsewhere
+      document.addEventListener('click', () => {
+        if (mobileLoginDropdown) {
+          mobileLoginDropdown.style.display = 'none';
+        }
+      });
     });
-    document.getElementById("foodRecommendationsLink").onclick = () => window.location.href = "foodrecommendations.php";
-document.getElementById("childNutritionLink").onclick = () => window.location.href = "childnutrition.php";
-document.getElementById("contactLink").onclick = () => window.location.href = "contact.php";
-document.getElementById("exerciseLink").onclick = () => window.location.href = "exercise.php";
-document.getElementById("foodSwapLink").onclick = () => window.location.href = "foodswap.php";
-//document.querySelectorAll('.btn-outline, .btn-primary').forEach(btn => btn.addEventListener('click', () => window.location.href = 'login.php'));
-document.getElementById("helpLink").onclick = () => window.location.href = "contact.php";
-document.getElementById("nutritionalBreakdownLink").onclick = () => window.location.href = "nutritionalbreakdown.php";
-document.getElementById("premiumLink").onclick = () => window.location.href = "premium.php";
-// Add these to your existing nav.php script
-document.getElementById("loginButtonNav").onclick = () => window.location.href = "login.php";
-document.getElementById("loginButtonMobile").onclick = () => window.location.href = "login.php";
-// Update navigation based on login status
-document.addEventListener('DOMContentLoaded', () => {
-    // Check if user is logged in (you might want to use PHP session instead)
-    const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
     
-    if (isLoggedIn) {
-        // Replace login/signup buttons with profile and logout
-        document.getElementById('loginButtonNav').style.display = 'none';
-        document.getElementById('signupButtonNav').style.display = 'none';
+    // Navigation links
+    document.getElementById("foodRecommendationsLink").onclick = () => window.location.href = "foodrecommendations.php";
+    document.getElementById("childNutritionLink").onclick = () => window.location.href = "childnutrition.php";
+    document.getElementById("contactLink").onclick = () => window.location.href = "contact.php";
+    document.getElementById("exerciseLink").onclick = () => window.location.href = "exercise.php";
+    document.getElementById("foodSwapLink").onclick = () => window.location.href = "foodswap.php";
+    document.getElementById("helpLink").onclick = () => window.location.href = "contact.php";
+    document.getElementById("nutritionalBreakdownLink").onclick = () => window.location.href = "nutritionalbreakdown.php";
+    document.getElementById("premiumLink").onclick = () => window.location.href = "premium.php";
+    document.getElementById("signupButtonNav").onclick = () => window.location.href = "signup.php";
+
+    // Update navigation based on login status
+    document.addEventListener('DOMContentLoaded', () => {
+        // Check if user is logged in (you might want to use PHP session instead)
+        const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
         
-        // Add logout button
-        const logoutBtn = document.createElement('button');
-        logoutBtn.className = 'btn btn-outline';
-        logoutBtn.id = 'logoutButtonNav';
-        logoutBtn.innerHTML = 'Logout';
-        logoutBtn.onclick = () => window.location.href = 'logout.php';
-        
-        const desktopNav = document.querySelector('.desktop-nav');
-        desktopNav.appendChild(logoutBtn);
-        
-        // For mobile
-        document.getElementById('loginButtonMobile').style.display = 'none';
-        document.getElementById('signupButtonMobile').style.display = 'none';
-        
-        const mobileLogoutBtn = document.createElement('button');
-        mobileLogoutBtn.className = 'btn btn-outline';
-        mobileLogoutBtn.id = 'logoutButtonMobile';
-        mobileLogoutBtn.innerHTML = 'Logout';
-        mobileLogoutBtn.onclick = () => window.location.href = 'logout.php';
-        
-        const mobileButtons = document.querySelector('.navbar-buttons-mobile');
-        mobileButtons.appendChild(mobileLogoutBtn);
-    }
-});
-      </script>
+        if (isLoggedIn) {
+            // Replace login/signup buttons with profile and logout
+            document.querySelectorAll('.login-dropdown').forEach(el => el.style.display = 'none');
+            document.getElementById('signupButtonNav').style.display = 'none';
+            
+            // Add logout button
+            const logoutBtn = document.createElement('button');
+            logoutBtn.className = 'btn btn-outline';
+            logoutBtn.id = 'logoutButtonNav';
+            logoutBtn.innerHTML = 'Logout';
+            logoutBtn.onclick = () => window.location.href = 'logout.php';
+            
+            const desktopNav = document.querySelector('.desktop-nav');
+            desktopNav.appendChild(logoutBtn);
+            
+            // For mobile
+            document.getElementById('loginButtonMobile').parentNode.style.display = 'none';
+            document.getElementById('signupButtonMobile').style.display = 'none';
+            
+            const mobileLogoutBtn = document.createElement('button');
+            mobileLogoutBtn.className = 'btn btn-outline';
+            mobileLogoutBtn.id = 'logoutButtonMobile';
+            mobileLogoutBtn.innerHTML = 'Logout';
+            mobileLogoutBtn.onclick = () => window.location.href = 'logout.php';
+            
+            const mobileButtons = document.querySelector('.navbar-buttons-mobile');
+            mobileButtons.appendChild(mobileLogoutBtn);
+        }
+    });
+  </script>
+</html>
