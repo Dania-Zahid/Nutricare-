@@ -136,7 +136,7 @@ CREATE TABLE user_favorites (
     CHECK (food_id IS NOT NULL OR swap_id IS NOT NULL OR exercise_id IS NOT NULL)
 );
 
--- 4. CHILD NUTRITION TABLES
+-- Child Nutrition Tables 
 CREATE TABLE child_nutrition_recommendations (
     recommendation_id INT AUTO_INCREMENT PRIMARY KEY,
     age_group ENUM('0-3 years', '4-8 years', '9-13 years', '14-18 years') NOT NULL,
@@ -146,6 +146,30 @@ CREATE TABLE child_nutrition_recommendations (
     serving_suggestion TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (food_id) REFERENCES foods(food_id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE child_nutrition_avoid_foods (
+    avoid_id INT AUTO_INCREMENT PRIMARY KEY,
+    age_group ENUM('0-3 years', '4-8 years', '9-13 years', '14-18 years') NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    reason TEXT NOT NULL,
+    image_url VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE child_nutrition_tips (
+    tip_id INT AUTO_INCREMENT PRIMARY KEY,
+    age_group ENUM('0-3 years', '4-8 years', '9-13 years', '14-18 years') NOT NULL,
+    tip_text TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE child_nutrition_descriptions (
+    description_id INT AUTO_INCREMENT PRIMARY KEY,
+    age_group ENUM('0-3 years', '4-8 years', '9-13 years', '14-18 years') NOT NULL,
+    description_text TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- 5. EXERCISE TABLES
@@ -262,6 +286,7 @@ CREATE TABLE reviews (
     FOREIGN KEY (consultation_id) REFERENCES consultations(consultation_id) ON DELETE CASCADE
 );
 
+
 -- 7. CONTACT & SUPPORT TABLES
 CREATE TABLE contact_messages (
     message_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -285,6 +310,14 @@ CREATE TABLE faqs (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE website_reviews (
+    review_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    rating TINYINT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+    comment TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL
+);
 -- 8. INITIAL DATA INSERTION
 
 -- Medical Conditions
@@ -555,3 +588,84 @@ INSERT INTO faqs (question, answer, category, is_featured) VALUES
 ('Can I consult with a nutritionist through NutriCare?', 'Yes, we offer premium consultations with certified nutritionists. Book a session through the Premium Consult page.', 'Premium', TRUE),
 ('What payment methods do you accept for consultations?', 'We accept credit cards, bank transfers, JazzCash, and EasyPaisa for premium consultations.', 'Premium', TRUE),
 ('How do food swaps help my health?', 'Food swaps suggest healthier alternatives that are better suited to your medical conditions, often with more nutrients and fewer negative effects.', 'Food', TRUE);
+
+
+
+
+-- Child Nutrition Recommendations
+INSERT INTO child_nutrition_recommendations (age_group, food_id, recommendation, nutritional_benefits, serving_suggestion) VALUES
+-- 0-3 years
+('0-3 years', 15, 'Excellent first food, rich in healthy fats for brain development', 'High in monounsaturated fats, folate, vitamin E, and potassium', 'Mash or serve in thin slices for older infants'),
+('0-3 years', 16, 'Great source of vitamin A and fiber', 'Rich in beta-carotene, vitamin C, and potassium', 'Cook until soft and mash or puree for young infants'),
+('0-3 years', 10, 'Full-fat plain yogurt provides calcium and probiotics', 'Good source of protein, calcium, and beneficial bacteria for gut health', 'Start with small amounts (1-2 tbsp) mixed with fruit purees'),
+('0-3 years', 14, 'Excellent plant-based protein and iron source', 'High in iron, folate, and fiber important for growth', 'Cook until very soft and puree or mash thoroughly'),
+
+-- 4-8 years
+('4-8 years', 1, 'Whole grain provides sustained energy for active kids', 'Rich in fiber, B vitamins, and minerals like magnesium', '1/2 to 1 cup cooked, served with vegetables and protein'),
+('4-8 years', 7, 'Important for brain development and omega-3s', 'Excellent source of protein, omega-3 fatty acids, and vitamin D', '2-3 oz servings, 2-3 times per week'),
+('4-8 years', 5, 'Crucial for vitamins, minerals, and fiber', 'High in vitamin C, K, folate, and antioxidants', '1/2 to 1 cup raw or cooked daily'),
+('4-8 years', 9, 'Healthy snack that provides good fats and protein', 'Rich in vitamin E, magnesium, and plant-based protein', '1 oz (about 23 almonds) as a snack'),
+
+-- 9-13 years
+('9-13 years', 2, 'Complete protein source for growing bodies', 'Contains all essential amino acids and is high in fiber', '1/2 to 1 cup cooked, great in salads or as side dish'),
+('9-13 years', 8, 'Lean protein supports muscle growth', 'Excellent source of protein, niacin, and selenium', '3-4 oz servings, grilled or baked'),
+('9-13 years', 11, 'Provides sustained energy and fiber', 'Rich in beta-glucan fiber that supports heart health', '1/2 to 1 cup cooked, great for breakfast'),
+('9-13 years', 12, 'Antioxidant-rich fruit for immune support', 'High in vitamin C, K, and antioxidants', '1/2 to 1 cup fresh or frozen'),
+
+-- 14-18 years
+('14-18 years', 7, 'Supports brain development in teenagers', 'Rich in omega-3s important for cognitive function', '4-6 oz servings, 2-3 times per week'),
+('14-18 years', 13, 'Healthy fats support hormone development', 'Excellent source of plant-based omega-3s and antioxidants', '1 oz (about 14 halves) as a snack'),
+('14-18 years', 17, 'Great for energy and essential minerals', 'High in fiber, omega-3s, calcium, and magnesium', '1-2 tbsp daily in yogurt or smoothies'),
+('14-18 years', 6, 'Iron-rich for growth spurts and menstruation', 'Excellent source of iron, folate, and vitamin K', '1-2 cups raw or 1/2 cup cooked daily');
+
+
+-- Child Nutrition Avoid Foods
+INSERT INTO child_nutrition_avoid_foods (age_group, name, reason, image_url) VALUES
+('0-3 years', 'Honey', 'Risk of infant botulism', 'https://images.immediate.co.uk/production/volatile/sites/30/2024/03/Honey440-bb52330.jpg?quality=90&resize=440,400'),
+('0-3 years', 'Whole Nuts', 'Choking hazard', 'https://www.ofi.com/content/dam/olamofi/products-and-ingredients/nuts/nuts-images-webp/nuts-whole-roasted.webp'),
+('0-3 years', 'Cow''s Milk (as main drink)', 'Not suitable before 12 months', 'https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80'),
+
+('4-8 years', 'Sugary Cereals', 'High in added sugars', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTsYpFPEbEr3BQAPBklCErXL6_K4frH_Lg6w&s'),
+('4-8 years', 'Processed Meats', 'High in sodium and preservatives', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaOusyyWFAMxOtPOKy2mT_2zeN2ql0Ai8t3Q&s'),
+('4-8 years', 'Soda', 'Empty calories and sugar', 'https://www.fodors.com/wp-content/uploads/2019/03/HERO_Worlds_Best_Soda_Bundaberg_shutterstock_679079920.jpg'),
+
+('9-13 years', 'Energy Drinks', 'High caffeine and sugar content', 'https://www.tastingtable.com/img/gallery/15-energy-drink-brands-that-arent-red-bull-ranked/intro-1729784757.jpg'),
+('9-13 years', 'Fast Food', 'High in unhealthy fats and sodium', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTILEztUySn0QQnePy8GVA_7IsbqHzlUQYgDw&s'),
+('9-13 years', 'Candy', 'Excessive sugar with no nutritional value', 'https://abeautifulmess.com/wp-content/uploads/2024/06/Candy-Salad-.jpg'),
+
+('14-18 years', 'Alcohol', 'Harmful to developing brains', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTILXhelRoK5Pl4VQoUS_BSN1tQPKrxwIbmmA&s'),
+('14-18 years', 'Diet Pills', 'Unsafe and ineffective', 'https://www.honorhealth.com/sites/default/files/styles/large/public/diet-pills-2-things-to-know.jpg?itok=dPUnCv8c'),
+('14-18 years', 'Excessive Caffeine', 'Can affect sleep and growth', 'https://images.immediate.co.uk/production/volatile/sites/30/2020/08/flat-white-3402c4f.jpg');
+
+-- Child Nutrition Tips
+INSERT INTO child_nutrition_tips (age_group, tip_text) VALUES
+('0-3 years', 'Exclusive breastfeeding recommended for first 6 months'),
+('0-3 years', 'Introduce iron-rich foods at 6 months (pureed meats, iron-fortified cereals)'),
+('0-3 years', 'Introduce one new food at a time, waiting 3-5 days to check for allergies'),
+('0-3 years', 'No added salt or sugar in baby foods'),
+('0-3 years', 'Ensure adequate vitamin D supplementation (400 IU/day)'),
+
+('4-8 years', 'Encourage a variety of fruits and vegetables (aim for 5 servings daily)'),
+('4-8 years', 'Include protein sources at each meal (eggs, lean meats, beans, dairy)'),
+('4-8 years', 'Limit juice to 4-6 oz per day and encourage water instead'),
+('4-8 years', 'Establish regular meal and snack times'),
+('4-8 years', 'Involve children in food preparation to encourage healthy eating'),
+
+('9-13 years', 'Increase calcium intake for bone growth (dairy, fortified alternatives)'),
+('9-13 years', 'Include iron-rich foods, especially for menstruating girls'),
+('9-13 years', 'Encourage breakfast to support concentration at school'),
+('9-13 years', 'Teach portion sizes to prevent overeating'),
+('9-13 years', 'Limit screen time during meals to promote mindful eating'),
+
+('14-18 years', 'Support increased calorie needs with nutrient-dense foods'),
+('14-18 years', 'Encourage regular meals to support growth and energy needs'),
+('14-18 years', 'Discuss healthy ways to manage weight (avoid fad diets)'),
+('14-18 years', 'Promote hydration with water instead of sugary drinks'),
+('14-18 years', 'Teach basic cooking skills for independence');
+
+-- Child Nutrition Descriptions
+INSERT INTO child_nutrition_descriptions (age_group, description_text) VALUES
+('0-3 years', 'Proper nutrition during the first 3 years is crucial for growth and development. Here are recommended foods and important nutritional guidelines for your little one.'),
+('4-8 years', 'Preschool and early school years are a time of rapid growth and development. These recommendations will help support your childs nutritional needs.'),
+('9-13 years', 'Pre-teen years bring increased nutritional needs. These foods will support growth, development, and school performance.'),
+('14-18 years', 'Teenagers have high nutritional needs to support growth spurts and development. These recommendations provide the foundation for healthy adulthood.');
