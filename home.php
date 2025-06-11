@@ -713,12 +713,12 @@
         <p class="feature-description">Complement your diet with appropriate exercise routines for optimal results.</p>
       </a>
       
-      <a href="fav.php" class="feature-card" style="animation-delay: 0.4s;">
+      <a href="add_review.php" class="feature-card" style="animation-delay: 0.4s;">
         <div class="feature-icon">
           <i class="fas fa-calendar-alt"></i>
         </div>
-        <h3 class="feature-title">Favorites</h3>
-        <p class="feature-description">Add any of your desired food to favorites and keep the ones you like closer.</p>
+        <h3 class="feature-title">Reviews</h3>
+        <p class="feature-description">Add your reviews regarding our website and keep us informed for future improvements</p>
       </a>
       
       <a href="nutritionalbreakdown.php" class="feature-card" style="animation-delay: 0.5s;">
@@ -829,7 +829,6 @@
     </div>
   </div>
 </section>
-
 
   </main>
 
