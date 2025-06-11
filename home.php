@@ -662,7 +662,9 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </button>
-          <button class="btn btn-outline">Explore Features</button>
+          <button class="btn btn-outline" id="explore-features-btn">
+            Explore Features
+          </button>
         </div>
         <p class="users-count">Helping 10,000+ users eat better every day</p>
       </div>
@@ -673,7 +675,7 @@
      
 <section class="features-section">
   <div class="container">
-    <div class="section-header">
+    <div class="section-header" id="features-section">
       <h2 class="section-title">Our Features</h2>
       <p class="section-description">Explore our comprehensive set of tools designed to help you achieve your health and nutrition goals.</p>
     </div>
@@ -964,7 +966,21 @@
         });
       });
       
-     
+      // Explore Features button scroll to section
+      const exploreFeaturesBtn = document.getElementById('explore-features-btn');
+      if (exploreFeaturesBtn) {
+        exploreFeaturesBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const featuresSection = document.getElementById('features-section');
+          if (featuresSection) {
+            featuresSection.scrollIntoView({ 
+              behavior: 'smooth' 
+            });
+          }
+        });
+      }
+      
+      // Animation on scroll
       const animateOnScroll = () => {
         const elements = document.querySelectorAll('.feature-card, .testimonial-card');
         
@@ -979,28 +995,30 @@
         });
       };
       
-      
+      // Initialize animations
       window.addEventListener('load', animateOnScroll);
       window.addEventListener('scroll', animateOnScroll);
-    const signupButtons = document.querySelectorAll('.btn-primary:not(.btn-auth)');
-    
-    signupButtons.forEach(button => {
-      button.addEventListener('click', (e) => {
-        
-        if (button.tagName === 'BUTTON') {
-          e.preventDefault();
-        }
-        window.location.href = 'signup.php';
+      
+      // Signup button handling
+      const signupButtons = document.querySelectorAll('.btn-primary:not(.btn-auth)');
+      
+      signupButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+          
+          if (button.tagName === 'BUTTON') {
+            e.preventDefault();
+          }
+          window.location.href = 'signup.php';
+        });
       });
-    });
 
-    const getStartedBtn = document.querySelector('.hero-buttons .btn-primary');
-    if (getStartedBtn) {
-      getStartedBtn.addEventListener('click', () => {
-        window.location.href = 'signup.php';
-      });
-    }
-  });
+      const getStartedBtn = document.querySelector('.hero-buttons .btn-primary');
+      if (getStartedBtn) {
+        getStartedBtn.addEventListener('click', () => {
+          window.location.href = 'signup.php';
+        });
+      }
+    });
 
     
   </script>
