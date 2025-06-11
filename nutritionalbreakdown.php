@@ -585,9 +585,7 @@ try {
           </p>
         </div>
         <?php if (isset($_SESSION['user_id'])): ?>
-          <button class="save-btn" id="saveButton" onclick="saveToFavorites(<?php echo $foodData['food_id']; ?>)">
-            <i class="fas fa-bookmark"></i> Save to Profile
-          </button>
+          
         <?php else: ?>
           <a href="login.php" class="save-btn">
             <i class="fas fa-sign-in-alt"></i> Login to Save
