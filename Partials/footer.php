@@ -329,7 +329,7 @@
             <li><a href="foodswap.php">Food Swaps</a></li>
             <li><a href="childnutrition.php">Child Nutrition</a></li>
             <li><a href="exercise.php">Exercise Tips</a></li>
-            <li><a href="fav.php">Favorites</a></li>
+            <li><a href="add_review.php">Reviews</a></li>
             <li><a href="nutritionalbreakdown.php">Nutritional Breakdown</a></li>
             <li><a href="premium.php">Premium Consult</a></li>
           </ul>
