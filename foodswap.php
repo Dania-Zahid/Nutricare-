@@ -1,521 +1,325 @@
+<?php
+require 'config.php';
+
+// Function to get food swaps from database
+function getFoodSwaps($conn, $searchTerm = '') {
+    try {
+        if (!empty($searchTerm)) {
+            // Search for foods matching the search term
+            $stmt = $conn->prepare("
+                SELECT fs.*, 
+                       original.name AS original_name, original.image_url AS original_image,
+                       better.name AS better_name, better.image_url AS better_image,
+                       better.calories, better.protein, better.carbs, better.fat, better.fiber,
+                       fs.reason, fs.benefit_description
+                FROM food_swaps fs
+                JOIN foods original ON fs.original_food_id = original.food_id
+                JOIN foods better ON fs.better_food_id = better.food_id
+                WHERE original.name LIKE ?
+            ");
+            $searchParam = "%" . $searchTerm . "%";
+            $stmt->execute([$searchParam]);
+            return $stmt->fetchAll();
+        } else {
+            // Get popular swaps (limit to 4)
+            $stmt = $conn->prepare("
+                SELECT fs.*, 
+                       original.name AS original_name, original.image_url AS original_image,
+                       better.name AS better_name, better.image_url AS better_image,
+                       better.calories, better.protein, better.carbs, better.fat, better.fiber,
+                       fs.reason, fs.benefit_description
+                FROM food_swaps fs
+                JOIN foods original ON fs.original_food_id = original.food_id
+                JOIN foods better ON fs.better_food_id = better.food_id
+                LIMIT 4
+            ");
+            $stmt->execute();
+            return $stmt->fetchAll();
+        }
+    } catch (PDOException $e) {
+        error_log("Database error in getFoodSwaps: " . $e->getMessage());
+        return [];
+    }
+}
+
+// Get search term from URL
+$searchTerm = $_GET['search'] ?? '';
+$swapSuggestions = getFoodSwaps($conn, $searchTerm);
+$popularSwaps = getFoodSwaps($conn);
+?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NutriCare Food Swap</title>
+    <title>Food Swap | NutriCare</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+        .hero {
+            background-color: #f7fafc;
+            padding: 4rem 0;
+            border-bottom: 1px solid #e2e8f0;
         }
-
-        body {
-            background-color: #f5f5f5;
-            min-height: 100vh;
-            padding: 2rem;
-            color: #333;
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
+        .card-shadow-lg {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-
-        .header {
-            margin-bottom: 2rem;
-            text-align: center;
-            position: relative;
+        .transition-shadow {
+            transition: box-shadow 0.3s ease;
         }
-
-        .header h1 {
-            color: green;
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            position: relative;
-            display: inline-block;
+        .bg-green-50 {
+            background-color: #f0fff4;
         }
-        
-        .header h1::after {
-            content: '';
+        .border-green-200 {
+            border-color: #9ae6b4;
+        }
+        .text-green-700 {
+            color: #2f855a;
+        }
+        .bg-red-50 {
+            background-color: #fff5f5;
+        }
+        .border-red-200 {
+            border-color: #fed7d7;
+        }
+        .text-red-700 {
+            color: #c53030;
+        }
+        .search-icon {
             position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(90deg, #2a9d8f, #8ab17d);
-            border-radius: 2px;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a0aec0;
+            height: 1.25rem;
+            width: 1.25rem;
         }
-
-        .header p {
-            color: #666;
-            font-size: 1.1rem;
-        }
-
-        .search-container {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-direction: column;
-        }
-        
-        @media (min-width: 768px) {
-            .search-container {
-                flex-direction: row;
-            }
-        }
-
-        .search-box {
-            display: flex;
-            flex: 1;
-            position: relative;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 1rem 1.5rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: #2a9d8f;
-            box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.2);
-        }
-
-        .search-button {
-            background-color:green;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 1rem 2rem;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
-        }
-
-        .search-button:hover {
-            background-color:green;
-        }
-
-        .recent-searches {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-bottom: 2rem;
-        }
-
-        .recent-search-tag {
-            background-color: #e0f5f2;
-            padding: 0.5rem 1rem;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .recent-search-tag:hover {
-            background-color: #bae8e2;
-        }
-
-        .alternatives-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 2rem;
-        }
-
-        .alternative-card {
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .alternative-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .swap-header {
-            background-color: #f8f9fa;
-            padding: 1.5rem;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .swap-title {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .swap-arrows {
-            font-size: 1.5rem;
-            color: #2a9d8f;
-            font-weight: bold;
-        }
-
-        .original-food {
-            font-size: 1rem;
-            color: #e76f51;
-            text-decoration: line-through;
-            margin-bottom: 0.3rem;
-        }
-
-        .alternative-food {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #2a9d8f;
-        }
-
-        .alternative-image {
-            height: 200px;
-            width: 100%;
+        .food-image {
+            width: 120px;
+            height: 120px;
             object-fit: cover;
+            border-radius: 0.5rem;
+            margin: 0 auto;
         }
-
-        .alternative-info {
-            padding: 1.5rem;
-            flex: 1;
+        .food-image-container {
             display: flex;
-            flex-direction: column;
-        }
-
-        .benefits-list {
-            margin: 1rem 0;
-            flex: 1;
-        }
-
-        .benefit-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 0.8rem;
-        }
-
-        .benefit-icon {
-            background-color: #e0f5f2;
-            color: #2a9d8f;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 0.8rem;
-            margin-right: 0.8rem;
-            flex-shrink: 0;
-        }
-
-        .benefit-text {
-            font-size: 0.95rem;
-            color: #555;
-            line-height: 1.5;
-        }
-
-        .alternative-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 1rem;
-        }
-
-        .btn {
-            padding: 0.7rem 1.2rem;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.2s ease;
-        }
-
-        .btn-outline {
-            background-color: transparent;
-            border: 1px solid #ddd;
-            color: #666;
-        }
-
-        .btn-outline:hover {
-            background-color: #f9f9f9;
-            border-color: #ccc;
-        }
-
-        .btn-primary {
-            background-color: #2a9d8f;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: #248277;
-        }
-        
-        .nutrition-badge {
-            background-color: #f8f9fa;
-            padding: 0.3rem 0.7rem;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            margin-right: 0.5rem;
-            margin-bottom: 0.5rem;
-            display: inline-block;
-            color: #666;
-            border: 1px solid #eee;
-        }
-
-        .nutrition-badges {
-            display: flex;
-            flex-wrap: wrap;
-            margin-top: 1rem;
-        }
-
-        @media (max-width: 768px) {
-            .alternatives-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .container {
-                padding: 1.5rem;
-                margin: 0 0.5rem;
-            }
-            
-            body {
-                padding: 1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .alternative-actions {
-                flex-direction: column;
-                gap: 0.8rem;
-            }
-
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .search-container {
-                flex-direction: column;
-            }
-            
-            .search-button {
-                width: 100%;
-            }
+            margin-bottom: 1rem;
         }
     </style>
 </head>
-<body>
-    <!-- PHP includes for navigation and header -->
-    <?php require 'Partials/head.php';?>
-    <?php require 'Partials/nav.php';?>
-    
-    <div class="container">
-        <div class="header">
-            <h1>Food Swap Finder</h1>
-            <p>Discover healthier alternatives to your favorite foods</p>
-        </div>
+<body class="min-h-screen bg-gray-50">
+    <!-- Include your header/navigation -->
+    <?php require 'Partials/head.php'; ?>
+    <?php require 'Partials/nav.php'; ?>
 
-        <div class="search-container">
-            <div class="search-box">
-                <input type="text" class="search-input" placeholder="Enter a food item (e.g., white rice, potato chips)" id="food-search">
-            </div>
-            <button class="search-button" id="search-button">Find Alternatives</button>
-        </div>
-
-        <div class="recent-searches">
-            <span class="recent-search-tag">White rice</span>
-            <span class="recent-search-tag">Ice cream</span>
-            <span class="recent-search-tag">Potato chips</span>
-            <span class="recent-search-tag">White bread</span>
-        </div>
-
-        <div class="alternatives-container">
-            <!-- Alternative Card 1: Brown Rice -->
-            <div class="alternative-card">
-                <div class="swap-header">
-                    <div class="swap-title">
-                        <div class="original-food">White Rice</div>
-                        <div class="alternative-food">Brown Rice</div>
-                    </div>
-                    <div class="swap-arrows">→</div>
-                </div>
-                <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Brown rice" class="alternative-image">
-                <div class="alternative-info">
-                    <div class="benefits-list">
-                        <div class="benefit-item">
-                            <div class="benefit-icon">✓</div>
-                            <div class="benefit-text">Lower glycemic index - helps maintain steady blood sugar levels</div>
-                        </div>
-                        <div class="benefit-item">
-                            <div class="benefit-icon">✓</div>
-                            <div class="benefit-text">Higher in fiber which supports digestive health</div>
-                        </div>
-                        <div class="benefit-item">
-                            <div class="benefit-icon">✓</div>
-                            <div class="benefit-text">Contains more nutrients including vitamin B, magnesium and phosphorus</div>
-                        </div>
-                    </div>
-                    
-                    <div class="nutrition-badges">
-                        <span class="nutrition-badge">High fiber</span>
-                        <span class="nutrition-badge">Low GI</span>
-                        <span class="nutrition-badge">Whole grain</span>
-                    </div>
-                    
-                    <div class="alternative-actions">
-                        <button class="btn btn-outline" id="favorite-btn-1">❤️ Add to Favorites</button>
-                        <button class="btn btn-primary">ℹ️ Nutrition Info</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Alternative Card 2: Quinoa -->
-            <div class="alternative-card">
-                <div class="swap-header">
-                    <div class="swap-title">
-                        <div class="original-food">White Rice</div>
-                        <div class="alternative-food">Quinoa</div>
-                    </div>
-                    <div class="swap-arrows">→</div>
-                </div>
-                <img src="https://images.unsplash.com/photo-1612708308455-fe03a1e76aa4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Quinoa" class="alternative-image">
-                <div class="alternative-info">
-                    <div class="benefits-list">
-                        <div class="benefit-item">
-                            <div class="benefit-icon">✓</div>
-                            <div class="benefit-text">Complete protein source containing all 9 essential amino acids</div>
-                        </div>
-                        <div class="benefit-item">
-                            <div class="benefit-icon">✓</div>
-                            <div class="benefit-text">Rich in antioxidants that help fight inflammation</div>
-                        </div>
-                        <div class="benefit-item">
-                            <div class="benefit-icon">✓</div>
-                            <div class="benefit-text">Contains higher amounts of iron and magnesium than white rice</div>
-                        </div>
-                    </div>
-                    
-                    <div class="nutrition-badges">
-                        <span class="nutrition-badge">High protein</span>
-                        <span class="nutrition-badge">Gluten-free</span>
-                        <span class="nutrition-badge">Iron-rich</span>
-                    </div>
-                    
-                    <div class="alternative-actions">
-                        <button class="btn btn-outline" id="favorite-btn-2">❤️ Add to Favorites</button>
-                        <button class="btn btn-primary">ℹ️ Nutrition Info</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Alternative Card 3: Cauliflower Rice -->
-            <div class="alternative-card">
-                <div class="swap-header">
-                    <div class="swap-title">
-                        <div class="original-food">White Rice</div>
-                        <div class="alternative-food">Cauliflower Rice</div>
-                    </div>
-                    <div class="swap-arrows">→</div>
-                </div>
-                <img src="https://images.unsplash.com/photo-1510627498534-cf7e9002facc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Cauliflower Rice" class="alternative-image">
-                <div class="alternative-info">
-                    <div class="benefits-list">
-                        <div class="benefit-item">
-                            <div class="benefit-icon">✓</div>
-                            <div class="benefit-text">Significantly fewer calories and carbohydrates</div>
-                        </div>
-                        <div class="benefit-item">
-                            <div class="benefit-icon">✓</div>
-                            <div class="benefit-text">High in vitamins C, K and folate</div>
-                        </div>
-                        <div class="benefit-item">
-                            <div class="benefit-icon">✓</div>
-                            <div class="benefit-text">Contains antioxidants that may reduce risk of heart disease</div>
-                        </div>
-                    </div>
-                    
-                    <div class="nutrition-badges">
-                        <span class="nutrition-badge">Low-carb</span>
-                        <span class="nutrition-badge">Vitamin-rich</span>
-                        <span class="nutrition-badge">Keto-friendly</span>
-                    </div>
-                    
-                    <div class="alternative-actions">
-                        <button class="btn btn-outline" id="favorite-btn-3">❤️ Add to Favorites</button>
-                        <button class="btn btn-primary">ℹ️ Nutrition Info</button>
-                    </div>
-                </div>
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+                    Food Swap
+                </h1>
+                <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                    Make healthier choices by discovering better alternatives to your favorite foods. 
+                    Enter a food below and we'll suggest a healthier swap!
+                </p>
             </div>
         </div>
     </div>
 
-    <!-- PHP include for footer -->
-    <?php require 'Partials/footer.php';?>
+    <!-- Search Section -->
+    <div class="container mx-auto px-4 py-12">
+        <div class="max-w-2xl mx-auto mb-8 bg-white rounded-lg card-shadow">
+            <div class="p-6">
+                <h2 class="text-center text-2xl text-gray-800 font-bold mb-6">
+                    Find Your Food Swap
+                </h2>
+                <form method="GET" action="foodswap.php" class="flex gap-3">
+                    <div class="flex-1 relative">
+                        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input
+                            type="text"
+                            name="search"
+                            placeholder="Enter a food (e.g., White Rice, Potato Chips)"
+                            value="<?php echo htmlspecialchars($searchTerm); ?>"
+                            class="w-full pl-10 pr-4 py-3 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        >
+                    </div>
+                    <button 
+                        type="submit"
+                        class="px-8 py-3 text-lg bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors"
+                    >
+                        Find Swap
+                    </button>
+                </form>
+            </div>
+        </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Search functionality
-            const searchInput = document.getElementById('food-search');
-            const searchButton = document.getElementById('search-button');
-            
-            searchButton.addEventListener('click', function() {
-                const searchValue = searchInput.value.trim().toLowerCase();
-                if (searchValue) {
-                    // In a real app, this would trigger an API call
-                    console.log('Searching for alternatives to:', searchValue);
-                    // For demo purposes we're just showing the existing alternatives
-                }
-            });
-            
-            // Recent search tags functionality
-            const recentSearchTags = document.querySelectorAll('.recent-search-tag');
-            recentSearchTags.forEach(tag => {
-                tag.addEventListener('click', function() {
-                    searchInput.value = this.textContent;
-                    searchButton.click();
-                });
-            });
-            
-            // Add to favorites functionality
-            const favoriteButtons = document.querySelectorAll('[id^="favorite-btn"]');
-            favoriteButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const currentText = this.textContent;
-                    if (currentText.includes('Add to')) {
-                        this.textContent = '✓ Added to Favorites';
-                        this.style.backgroundColor = '#e6f7ff';
-                        this.style.borderColor = '#91d5ff';
-                        this.style.color = '#1890ff';
-                    } else {
-                        this.textContent = '❤️ Add to Favorites';
-                        this.style.backgroundColor = 'transparent';
-                        this.style.borderColor = '#ddd';
-                        this.style.color = '#666';
+        <!-- Results Section -->
+        <?php if (!empty($searchTerm) && !empty($swapSuggestions)): ?>
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+                    Healthier Alternative Found!
+                </h2>
+                <?php foreach ($swapSuggestions as $swap): 
+                    // Calculate calories saved (example - you'd need to get original food calories)
+                    $calories_saved = 0;
+                    $originalStmt = $conn->prepare("SELECT calories FROM foods WHERE food_id = ?");
+                    $originalStmt->execute([$swap['original_food_id']]);
+                    $originalFood = $originalStmt->fetch();
+                    if ($originalFood) {
+                        $calories_saved = max(0, $originalFood['calories'] - $swap['calories']);
                     }
-                });
-            });
-        });
-    </script>
+                ?>
+                    <div class="mb-6 bg-white rounded-lg card-shadow-lg">
+                        <div class="p-8">
+                            <div class="flex flex-col md:flex-row items-center justify-between mb-6">
+                                <div class="text-center flex-1 mb-4 md:mb-0">
+                                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Current Choice</h3>
+                                    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                                        <div class="food-image-container">
+                                            <?php if (!empty($swap['original_image'])): ?>
+                                                <img src="<?php echo htmlspecialchars($swap['original_image']); ?>" alt="<?php echo htmlspecialchars($swap['original_name']); ?>" class="food-image">
+                                            <?php else: ?>
+                                                <div class="food-image bg-gray-200 flex items-center justify-center text-gray-500">
+                                                    No Image
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                        <p class="text-lg font-medium text-red-700"><?php echo htmlspecialchars($swap['original_name']); ?></p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex-shrink-0 mx-0 md:mx-8 my-4 md:my-0">
+                                    <svg class="h-8 w-8 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                    </svg>
+                                </div>
+                                
+                                <div class="text-center flex-1">
+                                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Better Choice</h3>
+                                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                                        <div class="food-image-container">
+                                            <?php if (!empty($swap['better_image'])): ?>
+                                                <img src="<?php echo htmlspecialchars($swap['better_image']); ?>" alt="<?php echo htmlspecialchars($swap['better_name']); ?>" class="food-image">
+                                            <?php else: ?>
+                                                <div class="food-image bg-gray-200 flex items-center justify-center text-gray-500">
+                                                    No Image
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                        <p class="text-lg font-medium text-green-700"><?php echo htmlspecialchars($swap['better_name']); ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-50 rounded-lg p-6">
+                                <div class="flex items-start gap-3 mb-4">
+                                    <svg class="h-6 w-6 text-green-500 flex-shrink-0 mt-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800 mb-2">Why This Swap?</h4>
+                                        <p class="text-gray-600"><?php echo htmlspecialchars($swap['reason']); ?></p>
+                                    </div>
+                                </div>
+                                
+                                <?php if ($calories_saved > 0): ?>
+                                    <div class="bg-white rounded-lg p-4 border border-green-200">
+                                        <p class="text-sm font-medium text-green-700">
+                                            💡 You could save approximately <span class="font-bold"><?php echo $calories_saved; ?> calories</span> per serving with this swap!
+                                        </p>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- No Results -->
+        <?php if (!empty($searchTerm) && empty($swapSuggestions)): ?>
+            <div class="max-w-2xl mx-auto bg-white rounded-lg card-shadow">
+                <div class="p-8 text-center">
+                    <p class="text-gray-600 mb-4">
+                        No swap suggestions found for "<?php echo htmlspecialchars($searchTerm); ?>". 
+                    </p>
+                    <p class="text-sm text-gray-500">
+                        Try searching for common foods like "white rice", "potato chips", or "fried chicken".
+                    </p>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <!-- Popular Swaps Section -->
+        <?php if (empty($searchTerm)): ?>
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+                    Popular Food Swaps
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <?php foreach ($popularSwaps as $swap): ?>
+                        <div class="bg-white rounded-lg card-shadow transition-shadow hover:card-shadow-lg">
+                            <div class="p-6">
+                                <div class="flex flex-col md:flex-row items-center">
+                                    <div class="flex-1 text-center mb-4 md:mb-0">
+                                        <div class="food-image-container">
+                                            <?php if (!empty($swap['original_image'])): ?>
+                                                <img src="<?php echo htmlspecialchars($swap['original_image']); ?>" alt="<?php echo htmlspecialchars($swap['original_name']); ?>" class="food-image">
+                                            <?php else: ?>
+                                                <div class="food-image bg-gray-200 flex items-center justify-center text-gray-500">
+                                                    No Image
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                        <p class="text-md font-medium text-red-700"><?php echo htmlspecialchars($swap['original_name']); ?></p>
+                                    </div>
+                                    
+                                    <div class="mx-4 my-2">
+                                        <svg class="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                        </svg>
+                                    </div>
+                                    
+                                    <div class="flex-1 text-center">
+                                        <div class="food-image-container">
+                                            <?php if (!empty($swap['better_image'])): ?>
+                                                <img src="<?php echo htmlspecialchars($swap['better_image']); ?>" alt="<?php echo htmlspecialchars($swap['better_name']); ?>" class="food-image">
+                                            <?php else: ?>
+                                                <div class="food-image bg-gray-200 flex items-center justify-center text-gray-500">
+                                                    No Image
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                        <p class="text-md font-medium text-green-700"><?php echo htmlspecialchars($swap['better_name']); ?></p>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-4 pt-4 border-t border-gray-200">
+                                    <div class="flex items-start gap-2">
+                                        <svg class="h-5 w-5 text-green-500 flex-shrink-0 mt-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <p class="text-sm text-gray-600"><?php echo htmlspecialchars($swap['reason']); ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+
+    <!-- Include your footer -->
+    <?php require 'Partials/footer.php'; ?>
 </body>
 </html>
