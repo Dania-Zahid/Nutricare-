@@ -830,23 +830,7 @@
   </div>
 </section>
 
- <!-- CTA Section -->
-    <section class="cta-section">
-      <div class="container">
-        <div class="cta-card">
-          <div class="cta-content">
-            <h2 class="cta-title">Check foods for your condition</h2>
-            <p class="cta-description">Our database contains thousands of foods analyzed for various health conditions. Find out what's best for your specific needs.</p>
-          </div>
-          <div class="cta-action">
-            <button class="btn btn-primary">
-              <i data-feather="search"></i>
-              Search Foods
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
+
   </main>
 
   <!-- Footer -->
