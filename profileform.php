@@ -527,7 +527,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               
               <?php foreach ($ageGroups as $value => $label): ?>
                 <label class="checkbox-item">
-                  <input type="checkbox" name="child-age[]" 
+                  <input type="radio" name="child-age[]" 
                          value="<?= $value ?>" 
                          <?= in_array($value, $childAgeGroups) ? 'checked' : '' ?>
                          <?= !($userData['child_mode'] ?? 0) ? 'disabled' : '' ?>>
