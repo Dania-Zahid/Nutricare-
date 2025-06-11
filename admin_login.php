@@ -8,7 +8,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
     
-    // Hardcoded admin credentials (in production, store securely in database)
     $admin_username = 'admin';
     $admin_password_hash = password_hash('nutricare_admin123', PASSWORD_DEFAULT);
     
