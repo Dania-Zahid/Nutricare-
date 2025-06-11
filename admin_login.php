@@ -56,6 +56,7 @@ if (isset($_SESSION['admin_logged_in'])) {
             padding: 2rem;
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            position: relative;
         }
         
         .login-logo {
@@ -78,11 +79,31 @@ if (isset($_SESSION['admin_logged_in'])) {
         .btn-login:hover {
             background-color: var(--green-dark);
         }
+        
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 1.5rem;
+            color: var(--green);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .back-button:hover {
+            color: var(--green-dark);
+            transform: translateX(-3px);
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="login-container">
+            <!-- Back button -->
+            <div class="back-button" onclick="window.location.href='home.php'">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+            
             <div class="login-logo">
                 <i class="fas fa-user-shield"></i>
                 <h2>NutriCare Admin</h2>
