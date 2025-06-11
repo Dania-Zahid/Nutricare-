@@ -766,63 +766,69 @@
     </section>
 
     <!-- Testimonials Section -->
-    <section class="testimonials-section">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">What Our Users Say</h2>
-          <p class="section-description">Join thousands of satisfied users who have improved their health with NutriCare.</p>
-        </div>
-        
-        <div class="testimonials-grid">
-          <div class="testimonial-card" style="animation-delay: 0s;">
-            <div class="testimonial-rating">
-              <i data-feather="star" class="star-filled"></i>
-              <i data-feather="star" class="star-filled"></i>
-              <i data-feather="star" class="star-filled"></i>
-              <i data-feather="star" class="star-filled"></i>
-              <i data-feather="star" class="star-filled"></i>
-            </div>
-            <p class="testimonial-content">"NutriCare helped me manage my diabetes through proper nutrition. The food recommendations are tailored to my condition and taste preferences."</p>
-            <div class="testimonial-author">
-              <p class="author-name">Sarah Johnson</p>
-              <p class="author-role">Diabetic Patient</p>
-            </div>
-          </div>
+<section class="testimonials-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">What Our Users Say</h2>
+      <p class="section-description">Join thousands of satisfied users who have improved their health with NutriCare.</p>
+      <button class="btn btn-outline" onclick="window.location.href='add_review.php'">
+        Add Your Review
+        <svg class="icon-arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
+      </button>
+    </div>
+    
+    <div class="testimonials-grid">
+      <?php
+      require 'config.php';
+      
+      try {
+          $stmt = $conn->query("
+              SELECT website_reviews.*, users.name 
+              FROM website_reviews 
+              JOIN users ON website_reviews.user_id = users.user_id 
+              ORDER BY created_at DESC 
+              LIMIT 3
+          ");
+          $reviews = $stmt->fetchAll();
+          
+          if (empty($reviews)) {
+              echo '<p>No reviews yet. Be the first to review!</p>';
+          } else {
+              foreach ($reviews as $review) {
+                  echo '
+                  <div class="testimonial-card">
+                    <div class="testimonial-rating">';
+                      
+                      // Display filled stars
+                      for ($i = 0; $i < $review['rating']; $i++) {
+                          echo '<i data-feather="star" class="star-filled"></i>';
+                      }
+                      
+                      // Display empty stars
+                      for ($i = $review['rating']; $i < 5; $i++) {
+                          echo '<i data-feather="star" class="star-empty"></i>';
+                      }
+                      
+                  echo '</div>
+                    <p class="testimonial-content">' . htmlspecialchars($review['comment']) . '</p>
+                    <div class="testimonial-author">
+                      <p class="author-name">' . htmlspecialchars($review['name']) . '</p>
+                      <p class="author-role">NutriCare User</p>
+                    </div>
+                  </div>';
+              }
+          }
+      } catch (PDOException $e) {
+          echo '<p>Error loading reviews. Please try again later.</p>';
+      }
+      ?>
+    </div>
+  </div>
+</section>
 
-          <div class="testimonial-card" style="animation-delay: 0.1s;">
-            <div class="testimonial-rating">
-              <i data-feather="star" class="star-filled"></i>
-              <i data-feather="star" class="star-filled"></i>
-              <i data-feather="star" class="star-filled"></i>
-              <i data-feather="star" class="star-filled"></i>
-              <i data-feather="star" class="star-empty"></i>
-            </div>
-            <p class="testimonial-content">"The meal planner and exercise tips have transformed my approach to fitness. I've seen significant improvements in my energy levels and performance."</p>
-            <div class="testimonial-author">
-              <p class="author-name">Michael Chen</p>
-              <p class="author-role">Fitness Enthusiast</p>
-            </div>
-          </div>
-
-          <div class="testimonial-card" style="animation-delay: 0.2s;">
-            <div class="testimonial-rating">
-              <i data-feather="star" class="star-filled"></i>
-              <i data-feather="star" class="star-filled"></i>
-              <i data-feather="star" class="star-filled"></i>
-              <i data-feather="star" class="star-filled"></i>
-              <i data-feather="star" class="star-filled"></i>
-            </div>
-            <p class="testimonial-content">"As a busy mom, I rely on NutriCare for my children's nutrition needs. The child nutrition section provides valuable insights and easy meal ideas."</p>
-            <div class="testimonial-author">
-              <p class="author-name">Emily Rodriguez</p>
-              <p class="author-role">Mother of Two</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA Section -->
+ <!-- CTA Section -->
     <section class="cta-section">
       <div class="container">
         <div class="cta-card">
