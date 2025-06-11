@@ -13,6 +13,7 @@ try {
     $user_count = $conn->query("SELECT COUNT(*) FROM users")->fetchColumn();
     $nutritionist_count = $conn->query("SELECT COUNT(*) FROM nutritionists")->fetchColumn();
     $food_count = $conn->query("SELECT COUNT(*) FROM foods")->fetchColumn();
+    $reviews_count = $conn->query("SELECT COUNT(*) FROM website_reviews")->fetchColumn();
     $consultation_count = $conn->query("SELECT COUNT(*) FROM consultations")->fetchColumn();
 } catch (PDOException $e) {
     die("Database error: " . $e->getMessage());
@@ -146,7 +147,8 @@ try {
             <a href="admin_conditions.php"><i class="fas fa-heartbeat"></i> Medical Conditions</a>
             <a href="admin_allergens.php"><i class="fas fa-allergies"></i> Allergens</a>
             <a href="admin_consultations.php"><i class="fas fa-calendar-check"></i> Consultations</a>
-            <a href="admin_reviews.php"><i class="fas fa-star"></i> Reviews</a>
+            <a href="admin_reviews.php"><i class="fas fa-star"></i> Website Reviews</a>
+            
             <a href="admin_faqs.php"><i class="fas fa-question-circle"></i> FAQs</a>
             <a href="admin_logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
@@ -199,6 +201,13 @@ try {
                     <span class="count-numbers"><?php echo $consultation_count; ?></span>
                     <span class="count-name">Consultations</span>
                 </div>
+            </div>
+            <div class="col-md-3">
+                 <div class="card-counter bg-secondary text-white">
+                   <i class="fas fa-star"></i>
+                    <span class="count-numbers"><?php echo $reviews_count; ?></span>
+                     <span class="count-name">Reviews</span>
+               </div>
             </div>
         </div>
         
@@ -263,7 +272,7 @@ try {
             </div>
         </div>
     </div>
-
+</div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Toggle sidebar on mobile
