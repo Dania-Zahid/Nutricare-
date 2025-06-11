@@ -377,8 +377,17 @@ INSERT INTO foods (name, category_id, calories, protein, carbs, fat, fiber, sodi
 ('Lentils', 8, 116, 9, 20, 0.4, 8, 2, 1.8, 32, 'Plant-based protein and fiber source','https://lentillovingfamily.com/wp-content/uploads/2024/05/lentil-types-1.jpg'),
 ('Avocado', 3, 160, 2, 8.5, 14.7, 6.7, 7, 0.7, 10, 'Healthy fat fruit','https://nutritionsource.hsph.harvard.edu/wp-content/uploads/2022/04/pexels-antonio-filigno-8538296-1024x657.jpg'),
 ('Sweet Potato', 2, 86, 1.6, 20.1, 0.1, 3, 55, 4.2, 63, 'Nutrient-dense root vegetable','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0mmY2E1iC5l8L4RgJrXnTo27dl2qnwmq_VQ&s'),
-('Chia Seeds', 8, 486, 16.5, 42.1, 30.7, 34.4, 16, 0, 30, 'High fiber superfood','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxRVT_xhMOz9mNV8eixIcZiOYGNnXHOCjQJQ&s');
-
+('Chia Seeds', 8, 486, 16.5, 42.1, 30.7, 34.4, 16, 0, 30, 'High fiber superfood','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxRVT_xhMOz9mNV8eixIcZiOYGNnXHOCjQJQ&s'),
+('Milk Chocolate', 7, 535, 7.6, 59, 30, 3.4, 79, 54, 45, 'Sweet chocolate containing milk solids and sugar','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQLt0xLjMnjIhXfj_T-uWVDfOfVYzn1u6Oqw&s'),
+('Dark Chocolate', 7, 598, 7.8, 46, 43, 11, 20, 24, 23, 'Chocolate with higher cocoa content and less sugar','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP5aw27nP2ZO6EjKqruFN_74-pT5OlHZhk9A&s'),
+('Pasta', 1, 131, 5, 25, 1, 1.2, 1, 0.5, 50, 'Refined wheat pasta with lower fiber content than whole wheat','https://www.allrecipes.com/thmb/IrY572TXic4UXXVn8EetsarI3S0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/AR-269500-creamy-garlic-pasta-Beauties-4x3-f404628aad2a435a9985b2cf764209b5.jpg'),
+('Whole Wheat Pasta', 1, 124, 5.5, 25, 0.6, 3.9, 1, 0.4, 42, 'Pasta made from whole wheat flour with more fiber','https://static01.nyt.com/images/2013/04/24/science/26recipehealth/26recipehealth-superJumbo.jpg'),
+('White Flour', 1, 364, 10, 76, 1, 2.7, 2, 0.3, 85, 'Refined wheat flour with lower fiber content','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMUoraVFn3a7QhC40h7WfnsNP-HP4nQ0bJdQ&s'),
+('Whole Wheat Flour', 1, 340, 13, 72, 2.5, 10.7, 2, 0.4, 74, 'Flour made from whole wheat with more fiber and nutrients','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRynrjvU5CdhWs-GpOIkWNwQxrjik-3PLtQYQ&s'),
+('Fried Chicken', 5, 300, 25, 15, 15, 0.5, 450, 0, 0, 'Chicken prepared with breading and frying','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpzXpzSU6VdWVZoPO6oQoJPn7E-lRKvdL_iQ&s'),
+('Grilled Chicken', 5, 165, 31, 0, 3.6, 0, 74, 0, 0, 'Chicken prepared without added fats','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJp3NLE0wdhqlsbL1HvAXBwlrc8kguL7qSyA&s'),
+('Potato Chips', 2, 536, 7, 53, 35, 4.8, 390, 0.4, 56, 'Fried potato slices high in fat and sodium','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxm0m2USR8pwkQUMQu3lNGn-VTB_knAkIyUA&s'),
+('Roasted Potatoes', 2, 93, 2, 21, 0.1, 2.2, 10, 1.2, 58, 'Healthier prepared potato option','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9JOdCjT8IruXsztneeD2DsqLXLoXw8GNA_w&s');
 -- Food Recommendations
 INSERT INTO food_recommendations (food_id, condition_id, recommendation_type, reason, scientific_evidence) VALUES
 -- Diabetes
@@ -491,8 +500,12 @@ INSERT INTO food_recommendations (food_id, condition_id, recommendation_type, re
 INSERT INTO food_swaps (original_food_id, better_food_id, reason, benefit_description, condition_id) VALUES
 (3, 1, 'Brown rice has more fiber and nutrients than white rice', 'Higher fiber content helps with blood sugar control and digestion', 1),
 (4, 2, 'Quinoa is a complete protein and has more nutrients than white bread', 'Provides all essential amino acids and more vitamins/minerals', NULL),
-(8, 7, 'Salmon provides healthy omega-3s compared to chicken', 'Omega-3 fatty acids support heart and brain health', 3);
-
+(8, 7, 'Salmon provides healthy omega-3s compared to chicken', 'Omega-3 fatty acids support heart and brain health', 3),
+(18, 19, 'Dark chocolate has less sugar and more antioxidants', 'Satisfies sweet cravings with more health benefits', 4),
+(20, 21, 'Whole wheat pasta has more fiber and lower GI', 'Slower digestion helps prevent blood sugar spikes', 1),
+(22, 23, 'Whole wheat flour has more fiber and nutrients', 'Slower glucose absorption helps blood sugar control', 1),
+(24, 25, 'Grilling avoids unhealthy breading and frying oils', 'Reduces saturated and trans fat intake', 3),
+(26, 27, 'Roasting avoids unhealthy fats from frying', 'Reduces calorie density and unhealthy fats', 1);
 -- Nutritionists (matching your premium.php)
 INSERT INTO nutritionists (name, email, password, specialization, qualifications, experience_years, hourly_rate, bio, average_rating, total_reviews, meeting_link) VALUES
 ('Dr. Aliya Hassan', 'aliya@nutricare.com', '$2y$10$hashedpassword', 'Diabetes & Weight Management', 'PhD in Nutrition, RD', 15, 3500, '10+ years experience helping patients manage blood sugar through nutrition.', 4.5, 142, 'https://meet.nutricare.com/aliya-hassan'),
