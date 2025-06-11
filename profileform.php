@@ -364,9 +364,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <a href="#" class="profile-nav-item active">
           <i class="fas fa-user-edit"></i> Profile Setup
         </a>
-        <a href="favorites.php" class="profile-nav-item">
-          <i class="fas fa-heart"></i> Favorites
-        </a>
       </nav>
     </aside>
 
