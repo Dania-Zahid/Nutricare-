@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -412,7 +413,7 @@
            <a id="foodSwapLink" href="#" class="dropdown-item"><i class="fas fa-sync-alt"></i> Food Swaps</a>
             <a id="childNutritionLink" href="#" class="dropdown-item"><i class="fas fa-baby"></i> Child Nutrition</a>
            <a id="exerciseLink" href="#" class="dropdown-item"><i class="fas fa-running"></i> Exercise Tips</a>
-            <a href="#" class="dropdown-item"><i class="fas fa-calendar-alt"></i> Favorites</a>
+            <a href="add_review.php" class="dropdown-item"><i class="fas fa-calendar-alt"></i> Reviews</a>
          <a id="nutritionalBreakdownLink" href="#" class="dropdown-item"><i class="fas fa-chart-pie"></i> Nutritional Breakdown</a>
           <a id="premiumLink" href="#" class="dropdown-item"><i class="fas fa-user-plus"></i> Premium Consult</a>
           </div>
@@ -455,7 +456,7 @@
         <button class="btn btn-primary" id="signupButtonNav">Sign Up</button>
         <a href="profileform.php" class="user-profile-btn">
           <i data-feather="user"></i>
-        </a>
+        </a>
       </div>
     </div>
 
@@ -468,7 +469,7 @@
          <a id="foodSwapLink" href="#" class="mobile-menu-item"><i class="fas fa-sync-alt"></i> Food Swaps</a>
           <a id="childNutritionLink" href="#" class="mobile-menu-item"><i class="fas fa-baby"></i> Child Nutrition</a>
          <a id="exerciseLink" href="#" class="mobile-menu-item"><i class="fas fa-running"></i> Exercise Tips</a>
-          <a href="#" class="mobile-menu-item"><i class="fas fa-calendar-alt"></i> Favorites </a>
+          <a href="#" class="mobile-menu-item"><i class="fas fa-calendar-alt"></i> Reviews </a>
           <a id="nutritionalBreakdownLink" href="#" class="mobile-menu-item"><i class="fas fa-chart-pie"></i> Nutritional Breakdown</a>
          <a id="premiumLink" href="#" class="mobile-menu-item"><i class="fas fa-user-plus"></i> Premium Consult</a>
         </div>
