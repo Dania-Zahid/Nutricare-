@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -304,14 +303,14 @@
       left: 0;
       top: 4rem;
       box-shadow: var(--shadow-md);
-      max-height: 0;
+      z-index: 1000;
       overflow: hidden;
-      transition: max-height 0.3s ease-in-out;
+      transition: all 0.3s ease;
     }
 
     .mobile-menu.active {
       display: block;
-      max-height: 100vh;
+      max-height: 1000px;
       border-bottom: 1px solid var(--green-light);
     }
 
@@ -384,7 +383,7 @@
 
     @media (max-width: 1023px) {
       .mobile-menu-section:last-child {
-        display: none;
+        display: block;
       }
     }
     </style>
@@ -409,19 +408,19 @@
             Features
           </button>
           <div class="dropdown-content">
-            <a id="foodRecommendationsLink" href="#" class="dropdown-item"><i class="fas fa-exchange-alt"></i> Food Recommendations</a>
-           <a id="foodSwapLink" href="#" class="dropdown-item"><i class="fas fa-sync-alt"></i> Food Swaps</a>
-            <a id="childNutritionLink" href="#" class="dropdown-item"><i class="fas fa-baby"></i> Child Nutrition</a>
-           <a id="exerciseLink" href="#" class="dropdown-item"><i class="fas fa-running"></i> Exercise Tips</a>
+            <a id="foodRecommendationsLink" href="foodrecommendations.php" class="dropdown-item"><i class="fas fa-exchange-alt"></i> Food Recommendations</a>
+           <a id="foodSwapLink" href="foodswap.php" class="dropdown-item"><i class="fas fa-sync-alt"></i> Food Swaps</a>
+            <a id="childNutritionLink" href="childnutrition.php" class="dropdown-item"><i class="fas fa-baby"></i> Child Nutrition</a>
+           <a id="exerciseLink" href="exercise.php" class="dropdown-item"><i class="fas fa-running"></i> Exercise Tips</a>
             <a href="add_review.php" class="dropdown-item"><i class="fas fa-calendar-alt"></i> Reviews</a>
-         <a id="nutritionalBreakdownLink" href="#" class="dropdown-item"><i class="fas fa-chart-pie"></i> Nutritional Breakdown</a>
-          <a id="premiumLink" href="#" class="dropdown-item"><i class="fas fa-user-plus"></i> Premium Consult</a>
+         <a id="nutritionalBreakdownLink" href="nutritionalbreakdown.php" class="dropdown-item"><i class="fas fa-chart-pie"></i> Nutritional Breakdown</a>
+          <a id="premiumLink" href="premium.php" class="dropdown-item"><i class="fas fa-user-plus"></i> Premium Consult</a>
           </div>
         </div>
 
         <a href="contact.php" class="nav-link">About</a>
-     <a id="contactLink" href="#" class="nav-link">Contact</a>
-      <a id="helpLink" href="#" class="nav-link">Help</a>
+     <a id="contactLink" href="contact.php" class="nav-link">Contact</a>
+      <a id="helpLink" href="contact.php" class="nav-link">Help</a>
 
         <!-- Login Dropdown -->
         <div class="dropdown login-dropdown">
@@ -453,7 +452,7 @@
             <a href="admin_login.php" class="dropdown-item"><i class="fas fa-user-shield"></i> Admin Login</a>
           </div>
         </div>
-        <button class="btn btn-primary" id="signupButtonNav">Sign Up</button>
+        <button class="btn btn-primary" id="signupButtonMobile">Sign Up</button>
         <a href="profileform.php" class="user-profile-btn">
           <i data-feather="user"></i>
         </a>
@@ -465,19 +464,19 @@
       <div class="mobile-menu-container">
         <div class="mobile-menu-section">
           <p class="mobile-menu-heading">Features</p>
-          <a id="foodRecommendationsLink" href="#"><i class="fas fa-exchange-alt"></i> Food Recommendations</a>
-         <a id="foodSwapLink" href="#" class="mobile-menu-item"><i class="fas fa-sync-alt"></i> Food Swaps</a>
-          <a id="childNutritionLink" href="#" class="mobile-menu-item"><i class="fas fa-baby"></i> Child Nutrition</a>
-         <a id="exerciseLink" href="#" class="mobile-menu-item"><i class="fas fa-running"></i> Exercise Tips</a>
-          <a href="#" class="mobile-menu-item"><i class="fas fa-calendar-alt"></i> Reviews </a>
-          <a id="nutritionalBreakdownLink" href="#" class="mobile-menu-item"><i class="fas fa-chart-pie"></i> Nutritional Breakdown</a>
-         <a id="premiumLink" href="#" class="mobile-menu-item"><i class="fas fa-user-plus"></i> Premium Consult</a>
+          <a id="foodRecommendationsLink" href="foodrecommendations.php" class="mobile-menu-item"><i class="fas fa-exchange-alt"></i> Food Recommendations</a>
+         <a id="foodSwapLink" href="foodswap.php" class="mobile-menu-item"><i class="fas fa-sync-alt"></i> Food Swaps</a>
+          <a id="childNutritionLink" href="childnutrition.php" class="mobile-menu-item"><i class="fas fa-baby"></i> Child Nutrition</a>
+         <a id="exerciseLink" href="exercise.php" class="mobile-menu-item"><i class="fas fa-running"></i> Exercise Tips</a>
+          <a href="add_review.php" class="mobile-menu-item"><i class="fas fa-calendar-alt"></i> Reviews </a>
+          <a id="nutritionalBreakdownLink" href="nutritionalbreakdown.php" class="mobile-menu-item"><i class="fas fa-chart-pie"></i> Nutritional Breakdown</a>
+         <a id="premiumLink" href="premium.php" class="mobile-menu-item"><i class="fas fa-user-plus"></i> Premium Consult</a>
         </div>
         
         <div class="mobile-menu-section">
           <a href="contact.php" class="mobile-menu-item"><i data-feather="info"></i> About</a>
-        <a id="contactLink" href="#" class="mobile-menu-item"><i data-feather="mail"></i> Contact</a>
-          <a href="#" class="mobile-menu-item"><i data-feather="help-circle"></i> Help</a>
+        <a id="contactLink" href="contact.php" class="mobile-menu-item"><i data-feather="mail"></i> Contact</a>
+          <a href="contact.php" class="mobile-menu-item"><i data-feather="help-circle"></i> Help</a>
         </div>
 
         <div class="mobile-menu-section">
@@ -493,22 +492,31 @@
     document.addEventListener('DOMContentLoaded', () => {
       feather.replace();
       
-      // Set current year in footer
-      document.getElementById('current-year').textContent = new Date().getFullYear();
-      
       // Mobile menu toggle
       const menuToggle = document.getElementById('menu-toggle');
       const mobileMenu = document.getElementById('mobile-menu');
       const menuIcon = document.getElementById('menu-icon');
       const closeIcon = document.getElementById('close-icon');
       
-      menuToggle.addEventListener('click', () => {
-        mobileMenu.classList.toggle('active');
+      menuToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isActive = mobileMenu.classList.contains('active');
         
-        if (mobileMenu.classList.contains('active')) {
+        if (isActive) {
+          mobileMenu.classList.remove('active');
+          menuIcon.style.display = 'block';
+          closeIcon.style.display = 'none';
+        } else {
+          mobileMenu.classList.add('active');
           menuIcon.style.display = 'none';
           closeIcon.style.display = 'block';
-        } else {
+        }
+      });
+      
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!mobileMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+          mobileMenu.classList.remove('active');
           menuIcon.style.display = 'block';
           closeIcon.style.display = 'none';
         }
@@ -556,6 +564,7 @@
     document.getElementById("nutritionalBreakdownLink").onclick = () => window.location.href = "nutritionalbreakdown.php";
     document.getElementById("premiumLink").onclick = () => window.location.href = "premium.php";
     document.getElementById("signupButtonNav").onclick = () => window.location.href = "signup.php";
+    document.getElementById("signupButtonMobile").onclick = () => window.location.href = "signup.php";
 
     // Update navigation based on login status
     document.addEventListener('DOMContentLoaded', () => {
