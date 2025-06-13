@@ -334,12 +334,7 @@ INSERT INTO medical_conditions (name, description) VALUES
 INSERT INTO allergens (name, description) VALUES
 ('Nuts', 'Tree nuts and peanuts'),
 ('Dairy', 'Milk and milk products'),
-('Gluten', 'Protein found in wheat, barley, and rye'),
-('Shellfish', 'Crustaceans and mollusks'),
-('Eggs', 'Chicken eggs and products containing eggs'),
-('Soy', 'Soybeans and soy products'),
-('Fish', 'Fin fish'),
-('Wheat', 'Wheat and wheat products');
+('Eggs', 'Chicken eggs and products containing eggs');
 
 -- Food Categories
 INSERT INTO food_categories (name, description) VALUES
