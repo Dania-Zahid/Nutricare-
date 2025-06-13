@@ -14,7 +14,7 @@ CREATE TABLE users (
     gender ENUM('Male', 'Female', 'Other', 'Prefer not to say'),
     weight DECIMAL(5,2),
     height DECIMAL(5,2),
-    diet_preference ENUM('Vegetarian', 'Non-Vegetarian', 'Vegan', 'Pescatarian'),
+    diet_preference ENUM('Vegetarian', 'Non-Vegetarian'),
     child_mode BOOLEAN DEFAULT FALSE,
     profile_completed BOOLEAN DEFAULT FALSE,
     profile_picture VARCHAR(255),
@@ -342,10 +342,11 @@ INSERT INTO food_categories (name, description) VALUES
 ('Vegetables', 'All fresh, frozen, and canned vegetables'),
 ('Fruits', 'All fresh, frozen, and canned fruits'),
 ('Dairy', 'Milk, cheese, yogurt, and other dairy products'),
-('Protein Foods', 'Meat, poultry, fish, beans, eggs, and nuts'),
+('Protein Foods', 'Meat, poultry, fish, beans, eggs'),
 ('Fats & Oils', 'Butter, oils, and other fats'),
 ('Sweets', 'Sugar, candy, and other sweets'),
-('Legumes', 'Beans, lentils, and peas');
+('Legumes', 'Beans, lentils, and peas'),
+('Nuts', 'Nuts');
 
 -- Sample Foods
 INSERT INTO foods (name, category_id, calories, protein, carbs, fat, fiber, sodium, sugar, glycemic_index, description, image_url) VALUES
@@ -362,13 +363,13 @@ INSERT INTO foods (name, category_id, calories, protein, carbs, fat, fiber, sodi
 -- Protein Foods
 ('Salmon', 5, 208, 20, 0, 13, 0, 59, 0, 0, 'Fatty fish rich in omega-3 fatty acids','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuFd7zlYdssGFg2XtBEJGJIiJ19plfD64xXA&s'),
 ('Chicken Breast', 5, 165, 31, 0, 3.6, 0, 74, 0, 0, 'Lean protein source','https://downshiftology.com/wp-content/uploads/2023/01/How-To-Make-Air-Fryer-Chicken-5.jpg'),
-('Almonds', 5, 579, 21, 22, 50, 12.5, 1, 4.4, 0, 'Nutritious tree nuts high in healthy fats','https://i0.wp.com/post.healthline.com/wp-content/uploads/2023/02/Almonds-Table-Bowl-1296x728-Header.jpg?w=1155&h=1528'),
+('Almonds', 9, 579, 21, 22, 50, 12.5, 1, 4.4, 0, 'Nutritious tree nuts high in healthy fats','https://i0.wp.com/post.healthline.com/wp-content/uploads/2023/02/Almonds-Table-Bowl-1296x728-Header.jpg?w=1155&h=1528'),
 
 -- Dairy
 ('Greek Yogurt', 4, 59, 10, 3.6, 0.4, 0, 36, 3.2, 0, 'Thick, protein-rich yogurt with probiotics','https://www.liveeatlearn.com/wp-content/uploads/2024/08/how-to-make-homemade-greek-yogurt-25.jpg'),
 ('Oats', 1, 389, 16.9, 66.3, 6.9, 10.6, 2, 0, 55, 'Whole grain rich in soluble fiber','https://media.post.rvohealth.io/wp-content/uploads/2020/09/oats-1200x628-facebook-1200x628.jpg'),
 ('Blueberries', 3, 57, 0.7, 14.5, 0.3, 2.4, 1, 10, 53, 'Antioxidant-rich berries','https://foodmarble.com/more/wp-content/uploads/2021/09/joanna-kosinska-4qujjbj3srs-unsplash-scaled.jpg'),
-('Walnuts', 5, 654, 15.2, 13.7, 65.2, 6.7, 2, 2.6, 15, 'Omega-3 rich nuts','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNKYGude3t4Rfvmc-grYtiy-TeAqEaJ07wug&s'),
+('Walnuts', 9, 654, 15.2, 13.7, 65.2, 6.7, 2, 2.6, 15, 'Omega-3 rich nuts','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNKYGude3t4Rfvmc-grYtiy-TeAqEaJ07wug&s'),
 ('Lentils', 8, 116, 9, 20, 0.4, 8, 2, 1.8, 32, 'Plant-based protein and fiber source','https://lentillovingfamily.com/wp-content/uploads/2024/05/lentil-types-1.jpg'),
 ('Avocado', 3, 160, 2, 8.5, 14.7, 6.7, 7, 0.7, 10, 'Healthy fat fruit','https://nutritionsource.hsph.harvard.edu/wp-content/uploads/2022/04/pexels-antonio-filigno-8538296-1024x657.jpg'),
 ('Sweet Potato', 2, 86, 1.6, 20.1, 0.1, 3, 55, 4.2, 63, 'Nutrient-dense root vegetable','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0mmY2E1iC5l8L4RgJrXnTo27dl2qnwmq_VQ&s'),
