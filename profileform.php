@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $age = filter_input(INPUT_POST, 'age', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1, 'max_range' => 120]]);
     $gender = $_POST['gender'] ?? '';
     $weight = filter_input(INPUT_POST, 'weight', FILTER_VALIDATE_FLOAT, ['options' => ['min_range' => 1, 'max_range' => 300]]);
-    $height = filter_input(INPUT_POST, 'height', FILTER_VALIDATE_INT, ['options' => ['min_range' => 50, 'max_range' => 250]]);
+    $height = filter_input(INPUT_POST, 'height', FILTER_VALIDATE_FLOAT, ['options' => ['min_range' => 50, 'max_range' => 250]]);
     $dietPreference = $_POST['diet'] ?? '';
     $childMode = isset($_POST['child_mode']) ? 1 : 0;
     $childAgeGroups = $_POST['child-age'] ?? [];
@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!in_array($gender, ['Male', 'Female', 'Other', 'Prefer not to say'])) $errors[] = 'Please select a valid gender';
     if (!$weight) $errors[] = 'Valid weight is required (1-300 kg)';
     if (!$height) $errors[] = 'Valid height is required (50-250 cm)';
-    if (!in_array($dietPreference, ['Vegetarian', 'Non-Vegetarian', 'Vegan', 'Pescatarian'])) $errors[] = 'Please select a diet preference';
+    if (!in_array($dietPreference, ['Vegetarian', 'Non-Vegetarian'])) $errors[] = 'Please select a diet preference';
     
     // Process medical conditions
     $selectedConditions = $_POST['conditions'] ?? [];
@@ -134,6 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="en">
 <head>
   <?php require 'Partials/head.php'; ?>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
       --green-light: #E3F4E1;
@@ -152,6 +153,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       display: grid;
       grid-template-columns: 250px 1fr;
       gap: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .profile-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
     }
 
     .profile-sidebar {
@@ -195,6 +203,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       border-radius: var(--border-radius);
       color: var(--gray-700);
       text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .profile-nav-item i {
+      width: 20px;
+      text-align: center;
     }
 
     .profile-nav-item.active {
@@ -213,6 +229,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .form-group {
@@ -235,6 +257,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       padding: 10px;
       border: 1px solid #ddd;
       border-radius: var(--border-radius);
+      box-sizing: border-box;
     }
 
     .checkbox-group {
@@ -242,6 +265,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 10px;
       margin-top: 10px;
+    }
+
+    @media (max-width: 480px) {
+      .checkbox-group {
+        grid-template-columns: 1fr;
+      }
     }
 
     .checkbox-item {
@@ -254,6 +283,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     .checkbox-item input[type="radio"] {
       width: 1.25rem;
       height: 1.25rem;
+      min-width: 1.25rem;
     }
 
     .full-width {
@@ -340,13 +370,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       color: #155724;
       border: 1px solid #c3e6cb;
     }
+
+    .alert-info {
+      background-color: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+
+    .btn-primary {
+      background-color: var(--green);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.3s;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--green-dark);
+    }
+
+    @media (max-width: 480px) {
+      .profile-content {
+        padding: 20px 15px;
+      }
+      
+      .form-actions {
+        text-align: center;
+      }
+      
+      .btn-primary {
+        width: 100%;
+        padding: 12px;
+      }
+    }
   </style>
 </head>
 <body>
   <?php require 'Partials/nav.php'; ?>
 
   <main class="profile-container">
-    <!-- Sidebar -->
+    <!-- Sidebar - Now appears first on mobile -->
     <aside class="profile-sidebar">
       <div class="profile-avatar">
         <i class="fas fa-user" style="font-size: 2.5rem; color: var(--green);"></i>
@@ -480,19 +546,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <span>Vegetarian</span>
             </label>
             <label class="checkbox-item">
-              <input type="radio" name="diet" value="Vegan"
-                     <?= ($userData['diet_preference'] ?? '') === 'Vegan' ? 'checked' : '' ?>>
-              <span>Vegan</span>
-            </label>
-            <label class="checkbox-item">
               <input type="radio" name="diet" value="Non-Vegetarian"
                      <?= ($userData['diet_preference'] ?? '') === 'Non-Vegetarian' ? 'checked' : '' ?>>
               <span>Non-Vegetarian</span>
-            </label>
-            <label class="checkbox-item">
-              <input type="radio" name="diet" value="Pescatarian"
-                     <?= ($userData['diet_preference'] ?? '') === 'Pescatarian' ? 'checked' : '' ?>>
-              <span>Pescatarian</span>
             </label>
           </div>
         </div>
@@ -536,7 +592,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary" style="padding: 10px 20px;">
+          <button type="submit" class="btn btn-primary">
             <i class="fas fa-save"></i> Save Profile
           </button>
         </div>
@@ -614,5 +670,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <?php require 'Partials/footer.php'; ?>
 </body>
 </html>
-
-
