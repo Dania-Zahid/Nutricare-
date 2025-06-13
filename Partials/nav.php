@@ -600,5 +600,22 @@
             mobileButtons.appendChild(mobileLogoutBtn);
         }
     });
+     const menuToggle = document.getElementById('menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const menuIcon = document.getElementById('menu-icon');
+      const closeIcon = document.getElementById('close-icon');
+
+      menuToggle.addEventListener('click', () => {
+        mobileMenu.classList.toggle('active');
+
+        if (mobileMenu.classList.contains('active')) {
+          menuIcon.style.display = 'none';
+          closeIcon.style.display = 'block';
+        } else {
+          menuIcon.style.display = 'block';
+          closeIcon.style.display = 'none';
+        }
+      });
+
   </script>
 </html>
