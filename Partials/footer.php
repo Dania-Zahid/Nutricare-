@@ -366,9 +366,9 @@
           <p>© <span id="current-year"></span> NutriCare. All rights reserved.</p>
         </div>
         <div class="legal-links">
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Service</a>
-          <a href="#">Cookie Policy</a>
+          <a href="admin_login.php">Admin Login</a>
+          <a href="Login.php">User Login</a>
+          
         </div>
       </div>
     </div>
