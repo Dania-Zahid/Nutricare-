@@ -865,25 +865,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
       document.getElementById('current-year').textContent = new Date().getFullYear();
 
       // ======================
-      // 2. MOBILE MENU TOGGLE
-      // ======================
-      const menuToggle = document.getElementById('menu-toggle');
-      const mobileMenu = document.getElementById('mobile-menu');
-      const menuIcon = document.getElementById('menu-icon');
-      const closeIcon = document.getElementById('close-icon');
-
-      menuToggle.addEventListener('click', () => {
-        mobileMenu.classList.toggle('active');
-
-        if (mobileMenu.classList.contains('active')) {
-          menuIcon.style.display = 'none';
-          closeIcon.style.display = 'block';
-        } else {
-          menuIcon.style.display = 'block';
-          closeIcon.style.display = 'none';
-        }
-      });
-
+      
       // ======================
       // 3. DROPDOWN MENUS
       // ======================
