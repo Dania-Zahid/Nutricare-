@@ -9,10 +9,13 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// Get user's medical conditions
+// Get user's medical conditions, allergens, and diet preferences
 $userId = $_SESSION['user_id'];
 $conditions = [];
+$allergens = [];
+$dietPreference = '';
 
+// Get user's medical conditions
 $stmt = $conn->prepare("SELECT mc.condition_id, mc.name 
                        FROM user_conditions uc
                        JOIN medical_conditions mc ON uc.condition_id = mc.condition_id
@@ -20,40 +23,88 @@ $stmt = $conn->prepare("SELECT mc.condition_id, mc.name
 $stmt->execute([$userId]);
 $conditions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Get recommended foods based on user's conditions
+// Get user's allergens
+$stmt = $conn->prepare("SELECT a.allergen_id, a.name 
+                       FROM user_allergens ua
+                       JOIN allergens a ON ua.allergen_id = a.allergen_id
+                       WHERE ua.user_id = ?");
+$stmt->execute([$userId]);
+$allergens = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Get user's diet preference
+$stmt = $conn->prepare("SELECT diet_preference FROM users WHERE user_id = ?");
+$stmt->execute([$userId]);
+$userData = $stmt->fetch(PDO::FETCH_ASSOC);
+$dietPreference = $userData['diet_preference'] ?? '';
+
+// Get recommended foods based on user's conditions, allergens, and diet preferences
 $recommendedFoods = [];
 $avoidFoods = [];
 $moderationFoods = [];
 
 if (!empty($conditions)) {
     $conditionIds = array_column($conditions, 'condition_id');
+    $allergenNames = array_column($allergens, 'name');
+    
+    // Base query parts
+    $select = "SELECT DISTINCT f.*, fr.reason, fr.scientific_evidence";
+    $from = "FROM food_recommendations fr
+             JOIN foods f ON fr.food_id = f.food_id
+             JOIN food_categories fc ON f.category_id = fc.category_id";
+    
+    // Where clauses
+    $whereConditions = "fr.condition_id IN (" . implode(',', array_fill(0, count($conditionIds), '?')) . ")";
+    
+    // Exclude foods that match user's allergens
+    $whereAllergens = "";
+    if (!empty($allergens)) {
+        $allergenConditions = [];
+        foreach ($allergenNames as $allergen) {
+            $allergen = strtolower($allergen);
+            $allergenConditions[] = "(f.is_common_allergen = TRUE OR LOWER(f.name) LIKE '%$allergen%' OR LOWER(f.description) LIKE '%$allergen%')";
+        }
+        $whereAllergens = "AND NOT (" . implode(" OR ", $allergenConditions) . ")";
+    }
+    
+    // Filter by diet preference
+    $whereDiet = "";
+    if ($dietPreference === 'Vegetarian') {
+        $whereDiet = "AND fc.name NOT IN ('Meat', 'Poultry', 'Fish', 'Seafood')";
+    } elseif ($dietPreference === 'Non-Vegetarian') {
+        $whereDiet = "AND fc.name NOT IN ('Vegetables', 'Fruits', 'Legumes')";
+    }
+    
+    // Parameters for prepared statements
+    $params = $conditionIds;
     
     // Get recommended foods
-    $placeholders = implode(',', array_fill(0, count($conditionIds), '?'));
-    $stmt = $conn->prepare("SELECT f.*, fr.reason, fr.scientific_evidence 
-                          FROM food_recommendations fr
-                          JOIN foods f ON fr.food_id = f.food_id
-                          WHERE fr.condition_id IN ($placeholders) 
-                          AND fr.recommendation_type = 'Recommended'");
-    $stmt->execute($conditionIds);
+    $stmt = $conn->prepare("$select $from 
+                           WHERE $whereConditions 
+                           AND fr.recommendation_type = 'Recommended'
+                           $whereAllergens
+                           $whereDiet
+                           ORDER BY f.name");
+    $stmt->execute($params);
     $recommendedFoods = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     // Get foods to avoid
-    $stmt = $conn->prepare("SELECT f.*, fr.reason, fr.scientific_evidence 
-                          FROM food_recommendations fr
-                          JOIN foods f ON fr.food_id = f.food_id
-                          WHERE fr.condition_id IN ($placeholders) 
-                          AND fr.recommendation_type = 'Avoid'");
-    $stmt->execute($conditionIds);
+    $stmt = $conn->prepare("$select $from 
+                           WHERE $whereConditions 
+                           AND fr.recommendation_type = 'Avoid'
+                           $whereAllergens
+                           $whereDiet
+                           ORDER BY f.name");
+    $stmt->execute($params);
     $avoidFoods = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     // Get foods to eat in moderation
-    $stmt = $conn->prepare("SELECT f.*, fr.reason, fr.scientific_evidence 
-                          FROM food_recommendations fr
-                          JOIN foods f ON fr.food_id = f.food_id
-                          WHERE fr.condition_id IN ($placeholders) 
-                          AND fr.recommendation_type = 'Moderation'");
-    $stmt->execute($conditionIds);
+    $stmt = $conn->prepare("$select $from 
+                           WHERE $whereConditions 
+                           AND fr.recommendation_type = 'Moderation'
+                           $whereAllergens
+                           $whereDiet
+                           ORDER BY f.name");
+    $stmt->execute($params);
     $moderationFoods = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -71,6 +122,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['favorite_action'])) {
         $stmt = $conn->prepare("DELETE FROM user_favorites WHERE user_id = ? AND food_id = ?");
         $stmt->execute([$userId, $foodId]);
     }
+    
+    // Refresh the page to update favorites
+    header("Location: foodrecommendations.php");
+    exit;
 }
 
 // Get user's favorite foods
@@ -409,6 +464,28 @@ $favoriteFoods = $stmt->fetchAll(PDO::FETCH_ASSOC);
         font-weight: 600;
     }
 
+    /* Filter indicators */
+    .filter-indicators {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+        justify-content: center;
+        padding: 0 2.5rem;
+    }
+
+    .filter-indicator {
+        background-color: var(--green-light);
+        color: var(--green-dark);
+        padding: 0.5rem 1rem;
+        border-radius: 30px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
     /* Responsive adjustments */
     @media (max-width: 768px) {
         main {
@@ -438,6 +515,10 @@ $favoriteFoods = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         .tab-content {
             padding: 0 1rem 1.5rem;
+        }
+
+        .filter-indicators {
+            padding: 0 1rem;
         }
 
         .foods-grid, #favorites-container {
@@ -500,6 +581,33 @@ $favoriteFoods = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="alert alert-info" style="margin-top: 1rem; background-color: var(--green-light); color: var(--green-dark); padding: 1rem; border-radius: var(--border-radius);">
                         <i class="fas fa-info-circle"></i> You haven't selected any medical conditions in your profile. 
                         <a href="profileform.php" style="color: var(--green-dark); text-decoration: underline;">Update your profile</a> to get personalized recommendations.
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <!-- Display active filters -->
+            <div class="filter-indicators">
+                <?php if (!empty($conditions)): ?>
+                    <div class="filter-indicator">
+                        <i class="fas fa-heartbeat"></i> Medical Conditions: 
+                        <?= implode(', ', array_column($conditions, 'name')) ?>
+                    </div>
+                <?php endif; ?>
+                
+                <?php if (!empty($allergens)): ?>
+                    <div class="filter-indicator">
+                        <i class="fas fa-allergies"></i> Allergens: 
+                        <?= implode(', ', array_column($allergens, 'name')) ?>
+                    </div>
+                <?php endif; ?>
+                
+                <?php if (!empty($dietPreference)): ?>
+                    <div class="filter-indicator">
+                        <i class="fas fa-utensils"></i> Diet: <?= $dietPreference ?>
+                    </div>
+                <?php else: ?>
+                    <div class="filter-indicator">
+                        <i class="fas fa-utensils"></i> Diet: Not specified
                     </div>
                 <?php endif; ?>
             </div>
