@@ -26,10 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sugar = (float)$_POST['sugar'];
         $glycemic_index = !empty($_POST['glycemic_index']) ? (int)$_POST['glycemic_index'] : null;
         $is_common_allergen = isset($_POST['is_common_allergen']) ? 1 : 0;
+        $image_url = trim($_POST['image_url']);
 
         // Insert food
-        $stmt = $conn->prepare("INSERT INTO foods (name, description, category_id, calories, protein, carbs, fat, fiber, sodium, sugar, glycemic_index, is_common_allergen) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$name, $description, $category_id, $calories, $protein, $carbs, $fat, $fiber, $sodium, $sugar, $glycemic_index, $is_common_allergen]);
+        $stmt = $conn->prepare("INSERT INTO foods (name, description, category_id, calories, protein, carbs, fat, fiber, sodium, sugar, glycemic_index, is_common_allergen, image_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$name, $description, $category_id, $calories, $protein, $carbs, $fat, $fiber, $sodium, $sugar, $glycemic_index, $is_common_allergen, $image_url]);
         
         $_SESSION['message'] = "Food item added successfully";
         header('Location: admin_foods.php');
@@ -118,6 +119,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 margin-left: 0;
             }
         }
+        #image-preview {
+            max-height: 200px;
+            margin-top: 10px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -190,6 +196,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                     </div>
                     
+                    <div class="mb-3">
+                        <label for="image_url" class="form-label">Image URL</label>
+                        <input type="url" class="form-control" id="image_url" name="image_url" placeholder="https://example.com/image.jpg">
+                        <img id="image-preview" src="#" alt="Image preview" class="mt-2">
+                    </div>
+                    
                     <div class="row mb-3">
                         <div class="col-md-3">
                             <label for="calories" class="form-label">Calories</label>
@@ -250,6 +262,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Toggle sidebar on mobile
         document.getElementById('sidebarToggle').addEventListener('click', function() {
             document.querySelector('.sidebar').classList.toggle('active');
+        });
+
+        // Image preview functionality
+        document.getElementById('image_url').addEventListener('input', function() {
+            const preview = document.getElementById('image-preview');
+            if (this.value) {
+                preview.src = this.value;
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
         });
     </script>
 </body>
