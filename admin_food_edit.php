@@ -43,10 +43,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sugar = (float)$_POST['sugar'];
         $glycemic_index = !empty($_POST['glycemic_index']) ? (int)$_POST['glycemic_index'] : null;
         $is_common_allergen = isset($_POST['is_common_allergen']) ? 1 : 0;
+        $image_url = trim($_POST['image_url']);
 
         // Update food
-        $stmt = $conn->prepare("UPDATE foods SET name = ?, description = ?, category_id = ?, calories = ?, protein = ?, carbs = ?, fat = ?, fiber = ?, sodium = ?, sugar = ?, glycemic_index = ?, is_common_allergen = ? WHERE food_id = ?");
-        $stmt->execute([$name, $description, $category_id, $calories, $protein, $carbs, $fat, $fiber, $sodium, $sugar, $glycemic_index, $is_common_allergen, $food_id]);
+        $stmt = $conn->prepare("UPDATE foods SET name = ?, description = ?, category_id = ?, calories = ?, protein = ?, carbs = ?, fat = ?, fiber = ?, sodium = ?, sugar = ?, glycemic_index = ?, is_common_allergen = ?, image_url = ? WHERE food_id = ?");
+        $stmt->execute([$name, $description, $category_id, $calories, $protein, $carbs, $fat, $fiber, $sodium, $sugar, $glycemic_index, $is_common_allergen, $image_url, $food_id]);
         
         $_SESSION['message'] = "Food item updated successfully";
         header('Location: admin_foods.php');
@@ -135,6 +136,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 margin-left: 0;
             }
         }
+        #image-preview {
+            max-height: 200px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -208,6 +213,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <textarea class="form-control" id="description" name="description" rows="3"><?php echo htmlspecialchars($food['description']); ?></textarea>
                     </div>
                     
+                    <div class="mb-3">
+                        <label for="image_url" class="form-label">Image URL</label>
+                        <input type="url" class="form-control" id="image_url" name="image_url" 
+                               value="<?php echo htmlspecialchars($food['image_url']); ?>" 
+                               placeholder="https://example.com/image.jpg">
+                        <?php if (!empty($food['image_url'])): ?>
+                            <img src="<?php echo htmlspecialchars($food['image_url']); ?>" id="image-preview" class="mt-2">
+                        <?php endif; ?>
+                    </div>
+                    
                     <div class="row mb-3">
                         <div class="col-md-3">
                             <label for="calories" class="form-label">Calories</label>
@@ -268,6 +283,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Toggle sidebar on mobile
         document.getElementById('sidebarToggle').addEventListener('click', function() {
             document.querySelector('.sidebar').classList.toggle('active');
+        });
+
+        // Image preview functionality
+        document.getElementById('image_url').addEventListener('input', function() {
+            const preview = document.getElementById('image-preview');
+            if (this.value) {
+                preview.src = this.value;
+                if (preview.style.display === 'none') {
+                    preview.style.display = 'block';
+                }
+            }
         });
     </script>
 </body>
